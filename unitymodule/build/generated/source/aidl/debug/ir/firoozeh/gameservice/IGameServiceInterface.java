@@ -70,11 +70,9 @@ return true;
 case TRANSACTION_ShowLeaderBoardUI:
 {
 data.enforceInterface(descriptor);
-java.lang.String _arg0;
-_arg0 = data.readString();
-ir.firoozeh.gameservice.IAsyncGameServiceCallback _arg1;
-_arg1 = ir.firoozeh.gameservice.IAsyncGameServiceCallback.Stub.asInterface(data.readStrongBinder());
-this.ShowLeaderBoardUI(_arg0, _arg1);
+ir.firoozeh.gameservice.IAsyncGameServiceCallback _arg0;
+_arg0 = ir.firoozeh.gameservice.IAsyncGameServiceCallback.Stub.asInterface(data.readStrongBinder());
+this.ShowLeaderBoardUI(_arg0);
 reply.writeNoException();
 return true;
 }
@@ -224,13 +222,12 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override public void ShowLeaderBoardUI(java.lang.String LeaderBoardID, ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException
+@Override public void ShowLeaderBoardUI(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
 try {
 _data.writeInterfaceToken(DESCRIPTOR);
-_data.writeString(LeaderBoardID);
 _data.writeStrongBinder((((callback!=null))?(callback.asBinder()):(null)));
 mRemote.transact(Stub.TRANSACTION_ShowLeaderBoardUI, _data, _reply, 0);
 _reply.readException();
@@ -385,7 +382,7 @@ static final int TRANSACTION_RequestSaveData = (android.os.IBinder.FIRST_CALL_TR
 }
 public void InitService(java.lang.String ClientId, java.lang.String ClientSecret, java.lang.String SysInfo, ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 public void RequestVersion(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
-public void ShowLeaderBoardUI(java.lang.String LeaderBoardID, ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
+public void ShowLeaderBoardUI(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 public void ShowAchievementUI(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 public void RequestAchievement(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 public void RequestLeaderBoards(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;

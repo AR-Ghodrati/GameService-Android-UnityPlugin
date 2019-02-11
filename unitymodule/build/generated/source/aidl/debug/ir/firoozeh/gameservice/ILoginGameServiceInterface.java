@@ -54,7 +54,9 @@ return true;
 case TRANSACTION_ShowLoginUI:
 {
 data.enforceInterface(descriptor);
-this.ShowLoginUI();
+ir.firoozeh.gameservice.IAsyncGameServiceCallback _arg0;
+_arg0 = ir.firoozeh.gameservice.IAsyncGameServiceCallback.Stub.asInterface(data.readStrongBinder());
+this.ShowLoginUI(_arg0);
 reply.writeNoException();
 return true;
 }
@@ -96,12 +98,13 @@ _data.recycle();
 }
 return _result;
 }
-@Override public void ShowLoginUI() throws android.os.RemoteException
+@Override public void ShowLoginUI(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
 try {
 _data.writeInterfaceToken(DESCRIPTOR);
+_data.writeStrongBinder((((callback!=null))?(callback.asBinder()):(null)));
 mRemote.transact(Stub.TRANSACTION_ShowLoginUI, _data, _reply, 0);
 _reply.readException();
 }
@@ -115,5 +118,5 @@ static final int TRANSACTION_isLoggedIn = (android.os.IBinder.FIRST_CALL_TRANSAC
 static final int TRANSACTION_ShowLoginUI = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
 }
 public boolean isLoggedIn() throws android.os.RemoteException;
-public void ShowLoginUI() throws android.os.RemoteException;
+public void ShowLoginUI(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 }
