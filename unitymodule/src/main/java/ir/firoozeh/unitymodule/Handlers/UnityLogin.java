@@ -89,7 +89,7 @@ public final class UnityLogin {
         }
     }
 
-    public void ShowLoginUI (IGameServiceLoginCheck check) {
+    public void ShowLoginUI (final IGameServiceLoginCheck check) {
         try {
             if (loginGameServiceInterface != null) {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {

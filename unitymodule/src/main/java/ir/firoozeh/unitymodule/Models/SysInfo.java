@@ -99,4 +99,56 @@ public class SysInfo implements Serializable {
     public String ToJSON () {
         return new Gson().toJson(this);
     }
+
+    public String getPackageName () {
+        return PackageName;
+    }
+
+    public String getVersionName () {
+        return VersionName;
+    }
+
+    public int getSDKVersion () {
+        return SDKVersion;
+    }
+
+    public int getVersionCode () {
+        return VersionCode;
+    }
+
+    public String getOSAPILevel () {
+        return OSAPILevel;
+    }
+
+    public String getDevice () {
+        return Device;
+    }
+
+    public String getModel () {
+        return Model;
+    }
+
+    public String getProduct () {
+        return Product;
+    }
+
+    public String getManufacturer () {
+        return Manufacturer;
+    }
+
+    public String getOtherTAGS () {
+        return OtherTAGS;
+    }
+
+    public int getScreenWidth () {
+        return ScreenWidth;
+    }
+
+    public int getScreenHeight () {
+        return ScreenHeight;
+    }
+
+    public String getSDCardState () {
+        return SDCardState;
+    }
 }

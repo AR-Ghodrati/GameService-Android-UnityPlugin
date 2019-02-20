@@ -1,11 +1,15 @@
 package ir.firoozeh.unitymodule.Handlers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -13,7 +17,6 @@ import android.util.Log;
 import ir.firoozeh.gameservice.IAsyncGameServiceCallback;
 import ir.firoozeh.gameservice.IGameServiceInterface;
 import ir.firoozeh.unitymodule.Interfaces.IGameServiceCallback;
-import ir.firoozeh.unitymodule.Models.SysInfo;
 import ir.firoozeh.unitymodule.Utils.DeviceInformationUtil;
 
 /**
@@ -86,14 +89,16 @@ public final class UnityGameService {
                 boolean ret = context.bindService(i, gameService, Context.BIND_AUTO_CREATE);
                 if (!ret)
                     callback.OnError("GameServiceNotBounded");
-            } else callback.OnError("GameServiceNotInstalled");
+            } else {
+                callback.OnError("GameServiceNotInstalled");
+            }
         } catch (Exception e) {
             Log.e(TAG, "initGameService() Exception:" + e.toString());
             callback.OnError("GameServiceException");
         }
     }
 
-    public void GetAchievement (IGameServiceCallback callback) {
+    public void GetAchievement (final IGameServiceCallback callback) {
 
         try {
             if (gameServiceInterface == null) {
@@ -117,7 +122,31 @@ public final class UnityGameService {
         }
     }
 
-    public void GetLeaderBoards (IGameServiceCallback callback) {
+    public void GetSDKVersion (final IGameServiceCallback callback) {
+
+        try {
+            if (gameServiceInterface == null) {
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) throws RemoteException {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) throws RemoteException {
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.RequestVersion(iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            callback.OnError("Exception:" + e.toString());
+        }
+    }
+
+    public void GetLeaderBoards (final IGameServiceCallback callback) {
 
         try {
             if (gameServiceInterface == null) {
@@ -141,7 +170,7 @@ public final class UnityGameService {
         }
     }
 
-    public void GetLeaderBoardData (String LeaderBoardID, IGameServiceCallback callback) {
+    public void GetLeaderBoardData (String LeaderBoardID, final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
                 callback.OnError("UnreachableService");
@@ -164,7 +193,7 @@ public final class UnityGameService {
         }
     }
 
-    public void ShowLeaderBoardUI (String LeaderBoardID, IGameServiceCallback callback) {
+    public void ShowLeaderBoardUI (final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
                 callback.OnError("UnreachableService");
@@ -187,7 +216,7 @@ public final class UnityGameService {
         }
     }
 
-    public void ShowAchievementUI (IGameServiceCallback callback) {
+    public void ShowAchievementUI (final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
                 callback.OnError("UnreachableService");
@@ -210,7 +239,7 @@ public final class UnityGameService {
         }
     }
 
-    public void UnlockAchievement (String AchievementID, boolean HaveNotification, IGameServiceCallback callback) {
+    public void UnlockAchievement (String AchievementID, boolean HaveNotification, final IGameServiceCallback callback) {
 
         try {
             if (gameServiceInterface == null) {
@@ -234,8 +263,7 @@ public final class UnityGameService {
         }
     }
 
-
-    public void SubmitScore (String Id, int Score, boolean HaveNotification, IGameServiceCallback callback) {
+    public void SubmitScore (String Id, int Score, boolean HaveNotification, final IGameServiceCallback callback) {
 
         try {
             if (gameServiceInterface == null) {
@@ -259,7 +287,7 @@ public final class UnityGameService {
         }
     }
 
-    public void GetLastSave (IGameServiceCallback callback) {
+    public void GetLastSave (final IGameServiceCallback callback) {
 
         try {
             if (gameServiceInterface == null) {
@@ -283,7 +311,7 @@ public final class UnityGameService {
         }
     }
 
-    public void SaveData (String Name, String Description, String Cover, String SaveData, IGameServiceCallback callback) {
+    public void SaveData (String Name, String Description, String Cover, String SaveData, final IGameServiceCallback callback) {
 
         try {
             if (gameServiceInterface == null) {
@@ -307,31 +335,6 @@ public final class UnityGameService {
         }
     }
 
-    public void SYSTEM_INFO (IGameServiceCallback callback) {
-        try {
-            if (gameServiceInterface == null) {
-                callback.OnError("UnreachableService");
-            } else {
-                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
-                    @Override
-                    public void OnCallback (String Result) throws RemoteException {
-                        SysInfo sysInfo = DeviceInformationUtil.GetSystemInfo(UnityActivity);
-                        sysInfo.setSDKVersion(Integer.parseInt(Result));
-                        callback.OnCallback(sysInfo.ToJSON());
-                    }
-
-                    @Override
-                    public void OnError (String Error) throws RemoteException {
-                        callback.OnError(Error);
-                    }
-                };
-                gameServiceInterface.RequestVersion(iAsyncGameServiceCallback);
-            }
-        } catch (Exception e) {
-            callback.OnError("Exception:" + e.toString());
-        }
-    }
-
     private boolean isPackageInstalled (PackageManager packageManager) {
         try {
             packageManager.getPackageInfo("ir.firoozeh.gameservice", 0);
@@ -339,6 +342,16 @@ public final class UnityGameService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private String getGameName (PackageManager packageManager, String packageName) {
+        try {
+            return packageManager.getPackageInfo(packageName, 0).packageName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     private class GameService implements ServiceConnection {
@@ -371,5 +384,55 @@ public final class UnityGameService {
             gameServiceInterface = null;
             Log.e(TAG, "GameServiceTest(): Disconnected");
         }
+    }
+
+    @SuppressLint ("SetTextI18n")
+    private void ShowInstallAppDialog () {
+
+
+        if (UnityActivity != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(UnityActivity);
+            builder.setTitle("نصب گیم سرویس");
+
+            if (UnityActivity.getPackageName() != null)
+                builder.setMessage("بازی \" " + UnityActivity.getPackageName() + "\" از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید ");
+            else
+                builder.setMessage("این بازی از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید");
+
+            builder.setPositiveButton("دریافت", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick (DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("https://gameservice.liara.run"));
+                    context.startActivity(Intent.createChooser(intent
+                            , "یک برنامه برای دریافت انتخاب کنید:"));
+                }
+            });
+
+            builder.show();
+
+        }
+
+       /*View root= LayoutInflater
+               .from(context)
+               .inflate(R.layout.not_install_dialog,null);
+
+        TextView textView= root.findViewById(R.id.txt);
+        Button download = root.findViewById(R.id.download);
+
+        if(context.getPackageName() !=null)
+            textView.setText("بازی \" "+context.getPackageName()+"\" از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید ");
+        else textView.setText("این بازی از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید");
+
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://gameservice.liara.run"));
+                context.startActivity(Intent.createChooser(intent
+                        ,"یک برنامه برای دریافت انتخاب کنید:"));
+            }
+        });
+        */
     }
 }

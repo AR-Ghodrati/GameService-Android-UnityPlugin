@@ -1,1 +1,4 @@
 ir.firoozeh.unitymodule
+id download
+id txt
+layout not_install_dialog
