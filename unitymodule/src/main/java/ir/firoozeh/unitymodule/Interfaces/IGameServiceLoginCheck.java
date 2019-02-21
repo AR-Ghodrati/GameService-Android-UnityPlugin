@@ -7,6 +7,5 @@ package ir.firoozeh.unitymodule.Interfaces;
 
 public interface IGameServiceLoginCheck {
     void isLoggedIn (boolean Status);
-
     void OnError (String Error);
 }

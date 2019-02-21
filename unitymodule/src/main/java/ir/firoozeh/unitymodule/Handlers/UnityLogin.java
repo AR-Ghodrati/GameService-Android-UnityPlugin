@@ -14,20 +14,25 @@ import ir.firoozeh.gameservice.IAsyncGameServiceCallback;
 import ir.firoozeh.gameservice.ILoginGameServiceInterface;
 import ir.firoozeh.unitymodule.Interfaces.IGameServiceCallback;
 import ir.firoozeh.unitymodule.Interfaces.IGameServiceLoginCheck;
+import ir.firoozeh.unitymodule.Interfaces.InstallListener;
+import ir.firoozeh.unitymodule.Utils.DialogUtil;
 
 /**
  * Created by Alireza Ghodrati on 03/10/2018 in
  * Time 11:34 AM for App ir.firoozeh.unitymodule
  */
 
-public final class UnityLogin {
+public final class UnityLogin implements InstallListener {
 
     private static UnityLogin Instance;
     private final String TAG = getClass().getName();
     private ILoginGameServiceInterface loginGameServiceInterface;
     private LoginService loginTestService;
     private Context context;
+    private Activity activity;
     private IGameServiceCallback loginCheck;
+    private boolean CheckAppStatus = true;
+
 
     public UnityLogin () {
         Instance = this;
@@ -41,10 +46,12 @@ public final class UnityLogin {
 
     public void SetUnityContext (Activity activity) {
         this.context = activity.getApplicationContext();
+        this.activity = activity;
     }
 
-    public void InitLoginService (IGameServiceCallback callback) {
+    public void InitLoginService (boolean CheckAppStatus, IGameServiceCallback callback) {
         this.loginCheck = callback;
+        this.CheckAppStatus = CheckAppStatus;
         initLoginService(callback);
     }
 
@@ -65,7 +72,12 @@ public final class UnityLogin {
                 if (!ret)
                     callback.OnError("GameServiceNotBounded");
 
-            } else callback.OnError("GameServiceNotInstalled");
+            } else {
+                if (CheckAppStatus)
+                    DialogUtil.ShowInstallAppDialog(activity, this);
+                else
+                    callback.OnError("GameServiceNotInstalled");
+            }
         } catch (Exception e) {
             Log.e(getClass().getName(), e.toString());
             callback.OnError("GameServiceException");
@@ -118,6 +130,16 @@ public final class UnityLogin {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public void onInstallDone () {
+        initLoginService(loginCheck);
+    }
+
+    @Override
+    public void onDismiss () {
+        loginCheck.OnError("GameServiceInstallDialogDismiss");
     }
 
     private class LoginService

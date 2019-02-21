@@ -1,15 +1,11 @@
 package ir.firoozeh.unitymodule.Handlers;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -17,14 +13,16 @@ import android.util.Log;
 import ir.firoozeh.gameservice.IAsyncGameServiceCallback;
 import ir.firoozeh.gameservice.IGameServiceInterface;
 import ir.firoozeh.unitymodule.Interfaces.IGameServiceCallback;
+import ir.firoozeh.unitymodule.Interfaces.InstallListener;
 import ir.firoozeh.unitymodule.Utils.DeviceInformationUtil;
+import ir.firoozeh.unitymodule.Utils.DialogUtil;
 
 /**
  * Created by Alireza Ghodrati on 04/10/2018 in
  * Time 02:36 PM for App ir.firoozeh.unitymodule
  */
 
-public final class UnityGameService {
+public final class UnityGameService implements InstallListener {
 
     private static UnityGameService Instance;
     private final String TAG = getClass().getName();
@@ -35,6 +33,7 @@ public final class UnityGameService {
 
     private String clientId, clientSecret;
     private boolean IsServiceRunning = false;
+    private boolean CheckAppStatus = true;
     private IGameServiceCallback InitCallback;
 
     public UnityGameService () {
@@ -53,13 +52,18 @@ public final class UnityGameService {
         this.UnityActivity = activity;
     }
 
-    public void InitGameService (String clientId, String clientSecret, IGameServiceCallback callback) {
+    public void InitGameService (String clientId, String clientSecret
+            , boolean CheckAppStatus, IGameServiceCallback callback) {
+
         if (clientId != null && clientSecret != null
                 && !clientId.isEmpty() && !clientSecret.isEmpty()) {
             this.clientId = clientId;
             this.clientSecret = clientSecret;
             this.InitCallback = callback;
+            this.CheckAppStatus = CheckAppStatus;
+
             initGameService(InitCallback);
+
         } else callback.OnError("InvalidInputs");
     }
 
@@ -90,7 +94,10 @@ public final class UnityGameService {
                 if (!ret)
                     callback.OnError("GameServiceNotBounded");
             } else {
-                callback.OnError("GameServiceNotInstalled");
+                if (CheckAppStatus)
+                    DialogUtil.ShowInstallAppDialog(UnityActivity, this);
+                else
+                    callback.OnError("GameServiceNotInstalled");
             }
         } catch (Exception e) {
             Log.e(TAG, "initGameService() Exception:" + e.toString());
@@ -354,6 +361,16 @@ public final class UnityGameService {
 
     }
 
+    @Override
+    public void onInstallDone () {
+        initGameService(InitCallback);
+    }
+
+    @Override
+    public void onDismiss () {
+        InitCallback.OnError("GameServiceInstallDialogDismiss");
+    }
+
     private class GameService implements ServiceConnection {
         public void onServiceConnected (ComponentName name, IBinder boundService) {
             gameServiceInterface = IGameServiceInterface.Stub
@@ -384,55 +401,5 @@ public final class UnityGameService {
             gameServiceInterface = null;
             Log.e(TAG, "GameServiceTest(): Disconnected");
         }
-    }
-
-    @SuppressLint ("SetTextI18n")
-    private void ShowInstallAppDialog () {
-
-
-        if (UnityActivity != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(UnityActivity);
-            builder.setTitle("نصب گیم سرویس");
-
-            if (UnityActivity.getPackageName() != null)
-                builder.setMessage("بازی \" " + UnityActivity.getPackageName() + "\" از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید ");
-            else
-                builder.setMessage("این بازی از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید");
-
-            builder.setPositiveButton("دریافت", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick (DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://gameservice.liara.run"));
-                    context.startActivity(Intent.createChooser(intent
-                            , "یک برنامه برای دریافت انتخاب کنید:"));
-                }
-            });
-
-            builder.show();
-
-        }
-
-       /*View root= LayoutInflater
-               .from(context)
-               .inflate(R.layout.not_install_dialog,null);
-
-        TextView textView= root.findViewById(R.id.txt);
-        Button download = root.findViewById(R.id.download);
-
-        if(context.getPackageName() !=null)
-            textView.setText("بازی \" "+context.getPackageName()+"\" از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید ");
-        else textView.setText("این بازی از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید");
-
-        download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://gameservice.liara.run"));
-                context.startActivity(Intent.createChooser(intent
-                        ,"یک برنامه برای دریافت انتخاب کنید:"));
-            }
-        });
-        */
     }
 }
