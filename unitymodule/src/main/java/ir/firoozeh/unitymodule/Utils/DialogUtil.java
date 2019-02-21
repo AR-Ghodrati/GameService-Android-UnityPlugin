@@ -26,9 +26,11 @@ public final class DialogUtil {
             builder.setCancelable(false);
 
             if (getApplicationName(UnityActivity) != null)
-                builder.setMessage("بازی \" " + getApplicationName(UnityActivity) + "\" از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید ");
+                builder.setMessage("بازی \" " + getApplicationName(UnityActivity) + "\" از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید. \n\n"
+                        + "(بعد از دریافت دکمه \"بررسی نصب\" را بزنید)");
             else
-                builder.setMessage("این بازی از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید");
+                builder.setMessage("این بازی از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید.\n\n"
+                        + "(بعد از دریافت دکمه \"بررسی نصب\" را بزنید)");
 
             builder.setPositiveButton("دریافت", null);
             builder.setNegativeButton("فعلا استفاده نمی کنم", null);
@@ -57,8 +59,10 @@ public final class DialogUtil {
                     checkService.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick (View v) {
-                            if (isPackageInstalled(UnityActivity.getPackageManager()))
+                            if (isPackageInstalled(UnityActivity.getPackageManager())) {
                                 listener.onInstallDone();
+                                dialog.dismiss();
+                            }
                             else
                                 Toast.makeText(UnityActivity, "گیم سرویس نصب نمی باشد", Toast.LENGTH_LONG).show();
 
