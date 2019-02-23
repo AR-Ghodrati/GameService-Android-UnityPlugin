@@ -35,6 +35,8 @@ public final class DeviceInformationUtil {
             sysInfo.setVersionName(pInfo.versionName);
             sysInfo.setVersionCode(pInfo.versionCode);
 
+            sysInfo.setGameOrientation(a.getResources().getConfiguration().orientation);
+
         } catch (PackageManager.NameNotFoundException e) {
         }
         sysInfo.setOSAPILevel(Build.VERSION.SDK);

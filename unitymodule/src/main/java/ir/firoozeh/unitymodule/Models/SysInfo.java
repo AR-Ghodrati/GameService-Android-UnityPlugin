@@ -1,5 +1,7 @@
 package ir.firoozeh.unitymodule.Models;
 
+import android.content.res.Configuration;
+
 import com.google.gson.Gson;
 
 import java.io.Serializable;
@@ -24,6 +26,11 @@ public class SysInfo implements Serializable {
     private int ScreenWidth;
     private int ScreenHeight;
     private String SDCardState;
+    private int GameOrientation = Configuration.ORIENTATION_LANDSCAPE;
+
+    public void setGameOrientation (int gameOrientation) {
+        GameOrientation = gameOrientation;
+    }
 
     public void setSDKVersion (int SDKVersion) {
         this.SDKVersion = SDKVersion;
@@ -84,7 +91,7 @@ public class SysInfo implements Serializable {
                 ", VersionName='" + VersionName + '\'' +
                 ", SDKVersion=" + SDKVersion +
                 ", VersionCode=" + VersionCode +
-                ", OSAPILevel=" + OSAPILevel +
+                ", OSAPILevel='" + OSAPILevel + '\'' +
                 ", Device='" + Device + '\'' +
                 ", Model='" + Model + '\'' +
                 ", Product='" + Product + '\'' +
@@ -93,6 +100,7 @@ public class SysInfo implements Serializable {
                 ", ScreenWidth=" + ScreenWidth +
                 ", ScreenHeight=" + ScreenHeight +
                 ", SDCardState='" + SDCardState + '\'' +
+                ", GameOrientation=" + GameOrientation +
                 '}';
     }
 
