@@ -16,5 +16,9 @@ interface IGameServiceInterface {
     void RequestGetData(IAsyncGameServiceCallback callback);
     void RequestSaveData(String SaveGameName,String SaveGameDes
     ,String SaveCover,String SaveGameData,IAsyncGameServiceCallback callback);
+    void RequestRemoveSaveData(IAsyncGameServiceCallback callback);
+    void RequestGetUserData(IAsyncGameServiceCallback callback);
+
+
 
 }

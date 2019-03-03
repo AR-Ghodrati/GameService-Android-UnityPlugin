@@ -168,6 +168,24 @@ this.RequestSaveData(_arg0, _arg1, _arg2, _arg3, _arg4);
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_RequestRemoveSaveData:
+{
+data.enforceInterface(descriptor);
+ir.firoozeh.gameservice.IAsyncGameServiceCallback _arg0;
+_arg0 = ir.firoozeh.gameservice.IAsyncGameServiceCallback.Stub.asInterface(data.readStrongBinder());
+this.RequestRemoveSaveData(_arg0);
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_RequestGetUserData:
+{
+data.enforceInterface(descriptor);
+ir.firoozeh.gameservice.IAsyncGameServiceCallback _arg0;
+_arg0 = ir.firoozeh.gameservice.IAsyncGameServiceCallback.Stub.asInterface(data.readStrongBinder());
+this.RequestGetUserData(_arg0);
+reply.writeNoException();
+return true;
+}
 default:
 {
 return super.onTransact(code, data, reply, flags);
@@ -367,6 +385,36 @@ _reply.recycle();
 _data.recycle();
 }
 }
+@Override public void RequestRemoveSaveData(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeStrongBinder((((callback!=null))?(callback.asBinder()):(null)));
+mRemote.transact(Stub.TRANSACTION_RequestRemoveSaveData, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public void RequestGetUserData(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeStrongBinder((((callback!=null))?(callback.asBinder()):(null)));
+mRemote.transact(Stub.TRANSACTION_RequestGetUserData, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
 }
 static final int TRANSACTION_InitService = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_RequestVersion = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
@@ -379,6 +427,8 @@ static final int TRANSACTION_RequestUnlockAchievement = (android.os.IBinder.FIRS
 static final int TRANSACTION_RequestSubmitScore = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
 static final int TRANSACTION_RequestGetData = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
 static final int TRANSACTION_RequestSaveData = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
+static final int TRANSACTION_RequestRemoveSaveData = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
+static final int TRANSACTION_RequestGetUserData = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
 }
 public void InitService(java.lang.String ClientId, java.lang.String ClientSecret, java.lang.String SysInfo, ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 public void RequestVersion(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
@@ -391,4 +441,6 @@ public void RequestUnlockAchievement(java.lang.String Id, boolean HaveNotificati
 public void RequestSubmitScore(java.lang.String Id, int score, boolean HaveNotification, ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 public void RequestGetData(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 public void RequestSaveData(java.lang.String SaveGameName, java.lang.String SaveGameDes, java.lang.String SaveCover, java.lang.String SaveGameData, ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
+public void RequestRemoveSaveData(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
+public void RequestGetUserData(ir.firoozeh.gameservice.IAsyncGameServiceCallback callback) throws android.os.RemoteException;
 }

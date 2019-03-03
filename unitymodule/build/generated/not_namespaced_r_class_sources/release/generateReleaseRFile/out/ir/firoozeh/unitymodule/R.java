@@ -9,15 +9,4 @@ package ir.firoozeh.unitymodule;
 public final class R {
     private R() {}
 
-    public static final class id {
-        private id() {}
-
-        public static int download = 0x7f0c0001;
-        public static int txt = 0x7f0c0002;
-    }
-    public static final class layout {
-        private layout() {}
-
-        public static int not_install_dialog = 0x7f0f0001;
-    }
 }

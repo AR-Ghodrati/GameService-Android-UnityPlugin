@@ -1,3 +1,0 @@
-int id download 0x7f0c0001
-int id txt 0x7f0c0002
-int layout not_install_dialog 0x7f0f0001
