@@ -113,12 +113,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
                         callback.OnCallback(Result);
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -137,12 +137,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
                         callback.OnCallback(Result);
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -161,12 +161,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
                         callback.OnCallback(Result);
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -184,12 +184,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
                         callback.OnCallback(Result);
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -207,12 +207,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
 
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -230,12 +230,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
 
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -254,12 +254,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
                         callback.OnCallback(Result);
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -278,12 +278,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
                         callback.OnCallback(Result);
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -302,12 +302,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
                         callback.OnCallback(Result);
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
@@ -326,12 +326,12 @@ public final class UnityGameService implements InstallListener {
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
 
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         callback.OnError(Error);
                     }
                 };
