@@ -6,8 +6,13 @@ interface IGameServiceInterface {
 
     void InitService(String ClientId,String ClientSecret,String SysInfo,IAsyncGameServiceCallback callback);
     void RequestVersion(IAsyncGameServiceCallback callback);
+
     void ShowLeaderBoardUI(IAsyncGameServiceCallback callback);
     void ShowAchievementUI(IAsyncGameServiceCallback callback);
+    void ShowGamePageUI(IAsyncGameServiceCallback callback);
+    void ShowSurveyUI(IAsyncGameServiceCallback callback);
+
+
     void RequestAchievement(IAsyncGameServiceCallback callback);
     void RequestLeaderBoards(IAsyncGameServiceCallback callback);
     void RequestLeaderBoardData(String LeaderBoardID,IAsyncGameServiceCallback callback);

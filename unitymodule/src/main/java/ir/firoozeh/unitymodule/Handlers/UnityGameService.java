@@ -246,6 +246,52 @@ public final class UnityGameService implements InstallListener {
         }
     }
 
+    public void ShowSurveyUI (final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.ShowSurveyUI(iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            callback.OnError("Exception:" + e.toString());
+        }
+    }
+
+    public void ShowGamePageUI (final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.ShowGamePageUI(iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            callback.OnError("Exception:" + e.toString());
+        }
+    }
+
     public void UnlockAchievement (String AchievementID, boolean HaveNotification, final IGameServiceCallback callback) {
 
         try {
