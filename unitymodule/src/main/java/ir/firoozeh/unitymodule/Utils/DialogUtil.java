@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import ir.firoozeh.unitymodule.Interfaces.InstallListener;
 
@@ -26,15 +25,12 @@ public final class DialogUtil {
             builder.setCancelable(false);
 
             if (getApplicationName(UnityActivity) != null)
-                builder.setMessage("بازی \" " + getApplicationName(UnityActivity) + "\" از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید. \n\n"
-                        + "(بعد از دریافت دکمه \"بررسی نصب\" را بزنید)");
-            else
-                builder.setMessage("این بازی از گیم سرویس استفاده می کند،برای دریافت آن کلیک کنید.\n\n"
-                        + "(بعد از دریافت دکمه \"بررسی نصب\" را بزنید)");
+                builder.setMessage("برای استفاده از خدمات آنلاین،نیاز به نصب برنامه گیم سرویس دارید"
+                );
 
-            builder.setPositiveButton("دریافت", null);
-            builder.setNegativeButton("فعلا استفاده نمی کنم", null);
-            builder.setNeutralButton("بررسی نصب", null);
+            builder.setPositiveButton("کافه بازار", null);
+            builder.setNegativeButton("دریافت مستقیم", null);
+            builder.setNeutralButton("بیخیال", null);
 
 
             final AlertDialog dialog = builder.create();
@@ -42,30 +38,29 @@ public final class DialogUtil {
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow (DialogInterface _dialog) {
-                    Button getService = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                    Button checkService = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-                    Button dismiss = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    Button getServiceـBazaar = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    Button dismiss = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                    Button getServiceـDirect = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
 
-                    getService.setOnClickListener(new View.OnClickListener() {
+                    getServiceـBazaar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick (View view) {
                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://gameservice.liara.run"));
+                            intent.setData(Uri.parse("https://cafebazaar.ir/app/ir.firoozeh.gameservice/?l=fa"));
                             UnityActivity.startActivity(Intent.createChooser(intent
-                                    , "یک برنامه برای دریافت انتخاب کنید:"));
+                                    , "یک برنامه انتخاب کنید:"));
+                            UnityActivity.finish();
                         }
                     });
 
-                    checkService.setOnClickListener(new View.OnClickListener() {
+                    getServiceـDirect.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick (View v) {
-                            if (isPackageInstalled(UnityActivity.getPackageManager())) {
-                                listener.onInstallDone();
-                                dialog.dismiss();
-                            }
-                            else
-                                Toast.makeText(UnityActivity, "گیم سرویس نصب نمی باشد", Toast.LENGTH_LONG).show();
-
+                        public void onClick (View view) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("https://gamesservice.ir/download/app"));
+                            UnityActivity.startActivity(Intent.createChooser(intent
+                                    , "یک برنامه انتخاب کنید:"));
+                            UnityActivity.finish();
                         }
                     });
 

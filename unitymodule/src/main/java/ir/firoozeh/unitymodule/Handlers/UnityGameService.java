@@ -427,7 +427,7 @@ public final class UnityGameService implements InstallListener {
                         callback.OnError(Error);
                     }
                 };
-                gameServiceInterface.RequestRemoveSaveData(iAsyncGameServiceCallback);
+                gameServiceInterface.RequestGetUserData(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
             callback.OnError("Exception:" + e.toString());
