@@ -1,7 +1,5 @@
 package ir.firoozeh.unitymodule.Interfaces;
 
-public interface InstallListener {
-    void onInstallDone ();
-
+public interface InstallDialogListener {
     void onDismiss ();
 }

@@ -7,22 +7,25 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.util.Log;
 
 import ir.firoozeh.gameservice.IAsyncGameServiceCallback;
 import ir.firoozeh.gameservice.ILoginGameServiceInterface;
 import ir.firoozeh.unitymodule.Interfaces.IGameServiceCallback;
 import ir.firoozeh.unitymodule.Interfaces.IGameServiceLoginCheck;
-import ir.firoozeh.unitymodule.Interfaces.InstallListener;
+import ir.firoozeh.unitymodule.Interfaces.InstallDialogListener;
+import ir.firoozeh.unitymodule.Interfaces.UpdateDialogListener;
+import ir.firoozeh.unitymodule.Interfaces.UpdateUtilListener;
+import ir.firoozeh.unitymodule.Utils.ConnectivityUtil;
 import ir.firoozeh.unitymodule.Utils.DialogUtil;
+import ir.firoozeh.unitymodule.Utils.UpdateUtil;
 
 /**
  * Created by Alireza Ghodrati on 03/10/2018 in
  * Time 11:34 AM for App ir.firoozeh.unitymodule
  */
 
-public final class UnityLogin implements InstallListener {
+public final class UnityLogin implements InstallDialogListener, UpdateDialogListener {
 
     private static UnityLogin Instance;
     private final String TAG = getClass().getName();
@@ -32,6 +35,7 @@ public final class UnityLogin implements InstallListener {
     private Activity activity;
     private IGameServiceCallback loginCheck;
     private boolean CheckAppStatus = true;
+    private boolean CheckOptionalUpdate = true;
 
 
     public UnityLogin () {
@@ -49,29 +53,47 @@ public final class UnityLogin implements InstallListener {
         this.activity = activity;
     }
 
-    public void InitLoginService (boolean CheckAppStatus, IGameServiceCallback callback) {
+    public void InitLoginService (
+            boolean CheckAppStatus
+            , boolean CheckOptionalUpdate
+            , IGameServiceCallback callback) {
+
         this.loginCheck = callback;
         this.CheckAppStatus = CheckAppStatus;
+        this.CheckOptionalUpdate = CheckOptionalUpdate;
         initLoginService(callback);
+
     }
 
     public void DisposeService () {
         releaseLoginService();
     }
 
-    private void initLoginService (IGameServiceCallback callback) {
+    private void initLoginService (final IGameServiceCallback callback) {
 
         try {
-            if (isPackageInstalled("ir.firoozeh.gameservice", context.getPackageManager())) {
-                loginTestService = new LoginService();
-                Intent i = new Intent(
-                        "ir.firoozeh.gameservice.Services.LoginService.BIND");
-                i.setPackage("ir.firoozeh.gameservice");
-                boolean ret = context.bindService(i, loginTestService, Context.BIND_AUTO_CREATE);
+            if (isPackageInstalled(context.getPackageManager())) {
+                if (ConnectivityUtil.isNetworkConnected(activity)) {
+                    int VerCode = getGameServiceVersionCode(context.getPackageManager());
+                    if (VerCode != -1) {
+                        UpdateUtil.CheckUpdate(activity, CheckOptionalUpdate, VerCode, new UpdateUtilListener() {
+                            @Override
+                            public void onUpdateAvailable (String ChangeLog, boolean MustUpdate) {
+                                DialogUtil.ShowUpdateAppDialog(activity, MustUpdate, ChangeLog, UnityLogin.this);
+                            }
 
-                if (!ret)
-                    callback.OnError("GameServiceNotBounded");
+                            @Override
+                            public void onHaveLastVersion () {
+                                _initLoginService(callback);
+                            }
 
+                            @Override
+                            public void onForceInit () {
+                                _initLoginService(callback);
+                            }
+                        });
+                    }
+                } else callback.OnError("NetworkUnreachable");
             } else {
                 if (CheckAppStatus)
                     DialogUtil.ShowInstallAppDialog(activity, this);
@@ -83,6 +105,18 @@ public final class UnityLogin implements InstallListener {
             callback.OnError("GameServiceException");
         }
 
+    }
+
+
+    private void _initLoginService (final IGameServiceCallback callback) {
+        loginTestService = new LoginService();
+        Intent i = new Intent(
+                "ir.firoozeh.gameservice.Services.LoginService.BIND");
+        i.setPackage("ir.firoozeh.gameservice");
+        boolean ret = context.bindService(i, loginTestService, Context.BIND_AUTO_CREATE);
+
+        if (!ret)
+            callback.OnError("GameServiceNotBounded");
     }
 
     private void releaseLoginService () {
@@ -106,12 +140,12 @@ public final class UnityLogin implements InstallListener {
             if (loginGameServiceInterface != null) {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
+                    public void OnCallback (String Result) {
                         check.isLoggedIn(true);
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
+                    public void OnError (String Error) {
                         check.OnError(Error);
                     }
                 };
@@ -123,24 +157,34 @@ public final class UnityLogin implements InstallListener {
         }
     }
 
-    private boolean isPackageInstalled (String packagename, PackageManager packageManager) {
+    private boolean isPackageInstalled (PackageManager packageManager) {
         try {
-            packageManager.getPackageInfo(packagename, 0);
+            packageManager.getPackageInfo("ir.firoozeh.gameservice", 0);
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    @Override
-    public void onInstallDone () {
-        initLoginService(loginCheck);
+    private int getGameServiceVersionCode (PackageManager packageManager) {
+        try {
+            return packageManager.getPackageInfo("ir.firoozeh.gameservice", 0).versionCode;
+        } catch (Exception e) {
+            return -1;
+        }
     }
+
 
     @Override
     public void onDismiss () {
         loginCheck.OnError("GameServiceInstallDialogDismiss");
     }
+
+    @Override
+    public void onUpdateDismiss () {
+        loginCheck.OnError("GameServiceUpdateDialogDismiss");
+    }
+
 
     private class LoginService
             implements ServiceConnection {

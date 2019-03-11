@@ -13,16 +13,15 @@ import android.util.Log;
 import ir.firoozeh.gameservice.IAsyncGameServiceCallback;
 import ir.firoozeh.gameservice.IGameServiceInterface;
 import ir.firoozeh.unitymodule.Interfaces.IGameServiceCallback;
-import ir.firoozeh.unitymodule.Interfaces.InstallListener;
+import ir.firoozeh.unitymodule.Interfaces.InstallDialogListener;
 import ir.firoozeh.unitymodule.Utils.DeviceInformationUtil;
-import ir.firoozeh.unitymodule.Utils.DialogUtil;
 
 /**
  * Created by Alireza Ghodrati on 04/10/2018 in
  * Time 02:36 PM for App ir.firoozeh.unitymodule
  */
 
-public final class UnityGameService implements InstallListener {
+public final class UnityGameService implements InstallDialogListener {
 
     private static UnityGameService Instance;
     private final String TAG = getClass().getName();
@@ -32,8 +31,6 @@ public final class UnityGameService implements InstallListener {
     private Activity UnityActivity;
 
     private String clientId, clientSecret;
-    private boolean IsServiceRunning = false;
-    private boolean CheckAppStatus = true;
     private IGameServiceCallback InitCallback;
 
     public UnityGameService () {
@@ -53,14 +50,13 @@ public final class UnityGameService implements InstallListener {
     }
 
     public void InitGameService (String clientId, String clientSecret
-            , boolean CheckAppStatus, IGameServiceCallback callback) {
+            , IGameServiceCallback callback) {
 
         if (clientId != null && clientSecret != null
                 && !clientId.isEmpty() && !clientSecret.isEmpty()) {
             this.clientId = clientId;
             this.clientSecret = clientSecret;
             this.InitCallback = callback;
-            this.CheckAppStatus = CheckAppStatus;
 
             initGameService(InitCallback);
 
@@ -93,11 +89,6 @@ public final class UnityGameService implements InstallListener {
                 boolean ret = context.bindService(i, gameService, Context.BIND_AUTO_CREATE);
                 if (!ret)
                     callback.OnError("GameServiceNotBounded");
-            } else {
-                if (CheckAppStatus)
-                    DialogUtil.ShowInstallAppDialog(UnityActivity, this);
-                else
-                    callback.OnError("GameServiceNotInstalled");
             }
         } catch (Exception e) {
             Log.e(TAG, "initGameService() Exception:" + e.toString());
@@ -472,14 +463,12 @@ public final class UnityGameService implements InstallListener {
             try {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
-                    public void OnCallback (String Result) throws RemoteException {
-                        IsServiceRunning = true;
+                    public void OnCallback (String Result) {
                         InitCallback.OnCallback("Success");
                     }
 
                     @Override
-                    public void OnError (String Error) throws RemoteException {
-                        IsServiceRunning = false;
+                    public void OnError (String Error) {
                         InitCallback.OnError(Error);
                     }
                 };
@@ -491,7 +480,6 @@ public final class UnityGameService implements InstallListener {
         }
 
         public void onServiceDisconnected (ComponentName name) {
-            IsServiceRunning = false;
             gameServiceInterface = null;
             Log.e(TAG, "GameServiceTest(): Disconnected");
         }
