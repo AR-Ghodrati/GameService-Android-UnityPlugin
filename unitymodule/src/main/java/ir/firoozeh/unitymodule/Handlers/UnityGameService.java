@@ -446,10 +446,6 @@ public final class UnityGameService implements InstallDialogListener {
 
     }
 
-    @Override
-    public void onInstallDone () {
-        initGameService(InitCallback);
-    }
 
     @Override
     public void onDismiss () {

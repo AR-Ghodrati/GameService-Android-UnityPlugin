@@ -76,7 +76,7 @@ public final class UnityLogin implements InstallDialogListener, UpdateDialogList
                 if (ConnectivityUtil.isNetworkConnected(activity)) {
                     int VerCode = getGameServiceVersionCode(context.getPackageManager());
                     if (VerCode != -1) {
-                        UpdateUtil.CheckUpdate(activity, CheckOptionalUpdate, VerCode, new UpdateUtilListener() {
+                        UpdateUtil.CheckUpdate(CheckOptionalUpdate, VerCode, new UpdateUtilListener() {
                             @Override
                             public void onUpdateAvailable (String ChangeLog, boolean MustUpdate) {
                                 DialogUtil.ShowUpdateAppDialog(activity, MustUpdate, ChangeLog, UnityLogin.this);

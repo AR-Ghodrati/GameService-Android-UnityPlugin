@@ -88,7 +88,7 @@ public final class DialogUtil {
             builder.setCancelable(false);
 
 
-            builder.setMessage(" برای استفاده از خدمات آنلاین،نیاز به بروزرسانی برنامه گیم سرویس دارید"
+            builder.setMessage(" برای استفاده از خدمات آنلاین،نیاز به بروزرسانی برنامه گیم سرویس دارید."
                     + "\n"
                     + "تغییرات نسخه جدید:"
                     + "\n"
@@ -97,8 +97,10 @@ public final class DialogUtil {
             builder.setPositiveButton("کافه بازار", null);
             builder.setNegativeButton("دریافت مستقیم", null);
 
-            if (!MustUpdate)
+            if (!MustUpdate) {
                 builder.setNeutralButton("بیخیال", null);
+                builder.setCancelable(true);
+            }
 
 
             final AlertDialog dialog = builder.create();
