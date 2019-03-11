@@ -29,24 +29,24 @@ public final class UpdateUtil {
             public void onResponse (JSONObject jsonObject) {
 
                 try {
+                    if (jsonObject.getBoolean("status")) {
 
-                    int NewVerCode = jsonObject.getInt("ver_code");
-                    boolean MustUpdate = jsonObject.getBoolean("must_update");
-                    String ChangeLog = jsonObject.getString("change_log");
+                        int NewVerCode = jsonObject.getJSONObject("data").getInt("ver_code");
+                        boolean MustUpdate = jsonObject.getJSONObject("data").getBoolean("must_update");
+                        String ChangeLog = jsonObject.getJSONObject("data").getString("change_log");
 
-                    if (MustUpdate) {
-                        if (NewVerCode > CurrentVerCode)
-                            listener.onUpdateAvailable(ChangeLog, true);
-                        else listener.onHaveLastVersion();
-                    } else {
-                        if (CheckOptionalUpdate) {
+                        if (MustUpdate) {
                             if (NewVerCode > CurrentVerCode)
-                                listener.onUpdateAvailable(ChangeLog, false);
+                                listener.onUpdateAvailable(ChangeLog, true);
                             else listener.onHaveLastVersion();
-                        } else listener.onForceInit();
+                        } else {
+                            if (CheckOptionalUpdate) {
+                                if (NewVerCode > CurrentVerCode)
+                                    listener.onUpdateAvailable(ChangeLog, false);
+                                else listener.onHaveLastVersion();
+                            } else listener.onForceInit();
+                        }
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
