@@ -22,7 +22,8 @@ public final class UpdateUtil {
             , final int CurrentVerCode
             , final UpdateUtilListener listener) {
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "",
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
+                "https://gameservice.liara.run/download/app/update",
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse (JSONObject jsonObject) {
