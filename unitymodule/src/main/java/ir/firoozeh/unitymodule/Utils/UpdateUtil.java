@@ -46,7 +46,7 @@ public final class UpdateUtil {
                                 else listener.onHaveLastVersion();
                             } else listener.onForceInit();
                         }
-                    }
+                    } else listener.onForceInit();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
