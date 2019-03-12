@@ -40,11 +40,13 @@ public final class UpdateUtil {
                     }
                 } else listener.onForceInit();
             } catch (JSONException e) {
+                listener.onForceInit();
                 e.printStackTrace();
             }
 
 
         } catch (Exception e) {
+            listener.onForceInit();
             e.printStackTrace();
         }
 

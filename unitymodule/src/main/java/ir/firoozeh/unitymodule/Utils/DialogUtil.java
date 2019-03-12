@@ -105,6 +105,15 @@ public final class DialogUtil {
 
             final AlertDialog dialog = builder.create();
 
+
+            if (!MustUpdate)
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss (DialogInterface dialog) {
+                        listener.onUpdateDismiss();
+                    }
+                });
+
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow (DialogInterface _dialog) {
@@ -138,7 +147,6 @@ public final class DialogUtil {
                         dismiss.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick (View v) {
-                                listener.onUpdateDismiss();
                                 dialog.dismiss();
                             }
                         });

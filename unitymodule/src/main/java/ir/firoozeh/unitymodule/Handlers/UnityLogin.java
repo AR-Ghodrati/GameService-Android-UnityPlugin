@@ -25,7 +25,7 @@ import ir.firoozeh.unitymodule.Utils.UpdateUtil;
  * Time 11:34 AM for App ir.firoozeh.unitymodule
  */
 
-public final class UnityLogin implements InstallDialogListener, UpdateDialogListener {
+public final class UnityLogin implements InstallDialogListener, UpdateDialogListener, UpdateUtilListener {
 
     private static UnityLogin Instance;
     private final String TAG = getClass().getName();
@@ -76,22 +76,7 @@ public final class UnityLogin implements InstallDialogListener, UpdateDialogList
                 if (ConnectivityUtil.isNetworkConnected(activity)) {
                     int VerCode = getGameServiceVersionCode(context.getPackageManager());
                     if (VerCode != -1) {
-                        UpdateUtil.CheckUpdate(CheckOptionalUpdate, VerCode, new UpdateUtilListener() {
-                            @Override
-                            public void onUpdateAvailable (String ChangeLog, boolean MustUpdate) {
-                                DialogUtil.ShowUpdateAppDialog(activity, MustUpdate, ChangeLog, UnityLogin.this);
-                            }
-
-                            @Override
-                            public void onHaveLastVersion () {
-                                _initLoginService(callback);
-                            }
-
-                            @Override
-                            public void onForceInit () {
-                                _initLoginService(callback);
-                            }
-                        });
+                        UpdateUtil.CheckUpdate(CheckOptionalUpdate, VerCode, UnityLogin.this);
                     }
                 } else callback.OnError("NetworkUnreachable");
             } else {
@@ -183,6 +168,22 @@ public final class UnityLogin implements InstallDialogListener, UpdateDialogList
     @Override
     public void onUpdateDismiss () {
         loginCheck.OnError("GameServiceUpdateDialogDismiss");
+        _initLoginService(loginCheck);
+    }
+
+    @Override
+    public void onUpdateAvailable (String ChangeLog, boolean MustUpdate) {
+        DialogUtil.ShowUpdateAppDialog(activity, MustUpdate, ChangeLog, UnityLogin.this);
+    }
+
+    @Override
+    public void onHaveLastVersion () {
+        _initLoginService(loginCheck);
+    }
+
+    @Override
+    public void onForceInit () {
+        _initLoginService(loginCheck);
     }
 
 
