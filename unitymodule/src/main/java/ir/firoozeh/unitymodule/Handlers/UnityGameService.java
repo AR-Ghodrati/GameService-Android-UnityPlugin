@@ -425,6 +425,51 @@ public final class UnityGameService implements InstallDialogListener {
         }
     }
 
+    public void DownloadObbDataFile (String ObbDataTAG, final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.RequestDownloadObbDataFile(ObbDataTAG, iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            callback.OnError("Exception:" + e.toString());
+        }
+    }
+
+    public void DownloadBundleDataFile (String BundleDataTAG, final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.RequestDownloadBundleDataFile(BundleDataTAG, iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            callback.OnError("Exception:" + e.toString());
+        }
+    }
 
 
     private boolean isPackageInstalled (PackageManager packageManager) {

@@ -25,5 +25,9 @@ interface IGameServiceInterface {
     void RequestGetUserData(IAsyncGameServiceCallback callback);
 
 
+    void RequestDownloadObbDataFile(String ObbDataTAG,IAsyncGameServiceCallback callback);
+    void RequestDownloadBundleDataFile(String BundleDataTAG,IAsyncGameServiceCallback callback);
+
+
 
 }
