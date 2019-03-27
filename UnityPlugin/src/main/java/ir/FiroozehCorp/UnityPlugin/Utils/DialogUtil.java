@@ -124,7 +124,7 @@ public final class DialogUtil {
                         @Override
                         public void onClick (View view) {
                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://cafebazaar.ir/app/ir.firoozeh.gameservice/?l=fa"));
+                            intent.setData(Uri.parse("https://cafebazaar.ir/app/ir.FiroozehCorp.GameService/?l=fa"));
                             UnityActivity.startActivity(Intent.createChooser(intent
                                     , "یک برنامه انتخاب کنید:"));
                             UnityActivity.finish();
