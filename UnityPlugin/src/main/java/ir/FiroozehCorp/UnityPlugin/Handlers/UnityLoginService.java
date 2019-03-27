@@ -25,9 +25,9 @@ import ir.FiroozehCorp.UnityPlugin.Utils.UpdateUtil;
  * Time 11:34 AM for App ir.firoozeh.unitymodule
  */
 
-public final class UnityLogin implements InstallDialogListener, UpdateDialogListener, UpdateUtilListener {
+public final class UnityLoginService implements InstallDialogListener, UpdateDialogListener, UpdateUtilListener {
 
-    private static UnityLogin Instance;
+    private static UnityLoginService Instance;
     private final String TAG = getClass().getName();
     private ILoginGameServiceInterface loginGameServiceInterface;
     private LoginService loginTestService;
@@ -38,12 +38,12 @@ public final class UnityLogin implements InstallDialogListener, UpdateDialogList
     private boolean CheckOptionalUpdate = true;
 
 
-    public UnityLogin () {
+    public UnityLoginService () {
         Instance = this;
     }
 
-    public static UnityLogin GetInstance () {
-        if (Instance == null) Instance = new UnityLogin();
+    public static UnityLoginService GetInstance () {
+        if (Instance == null) Instance = new UnityLoginService();
         return Instance;
 
     }
@@ -76,7 +76,7 @@ public final class UnityLogin implements InstallDialogListener, UpdateDialogList
                 if (ConnectivityUtil.isNetworkConnected(activity)) {
                     int VerCode = getGameServiceVersionCode(context.getPackageManager());
                     if (VerCode != -1) {
-                        UpdateUtil.CheckUpdate(CheckOptionalUpdate, VerCode, UnityLogin.this);
+                        UpdateUtil.CheckUpdate(CheckOptionalUpdate, VerCode, UnityLoginService.this);
                     }
                 } else callback.OnError("NetworkUnreachable");
             } else {
@@ -173,7 +173,7 @@ public final class UnityLogin implements InstallDialogListener, UpdateDialogList
 
     @Override
     public void onUpdateAvailable (String ChangeLog, boolean MustUpdate) {
-        DialogUtil.ShowUpdateAppDialog(activity, MustUpdate, ChangeLog, UnityLogin.this);
+        DialogUtil.ShowUpdateAppDialog(activity, MustUpdate, ChangeLog, UnityLoginService.this);
     }
 
     @Override
