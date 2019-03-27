@@ -144,7 +144,7 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
 
     private boolean isPackageInstalled (PackageManager packageManager) {
         try {
-            packageManager.getPackageInfo("ir.firoozeh.gameservice", 0);
+            packageManager.getPackageInfo("ir.FiroozehCorp.GameService", 0);
             return true;
         } catch (Exception e) {
             return false;
@@ -153,7 +153,7 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
 
     private int getGameServiceVersionCode (PackageManager packageManager) {
         try {
-            return packageManager.getPackageInfo("ir.firoozeh.gameservice", 0).versionCode;
+            return packageManager.getPackageInfo("ir.FiroozehCorp.GameService", 0).versionCode;
         } catch (Exception e) {
             return -1;
         }

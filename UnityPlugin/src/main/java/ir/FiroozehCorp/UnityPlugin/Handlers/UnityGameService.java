@@ -476,7 +476,7 @@ public final class UnityGameService implements InstallDialogListener {
 
     private boolean isPackageInstalled (PackageManager packageManager) {
         try {
-            packageManager.getPackageInfo("ir.firoozeh.gameservice", 0);
+            packageManager.getPackageInfo("ir.FiroozehCorp.GameService", 0);
             return true;
         } catch (Exception e) {
             return false;
