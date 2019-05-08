@@ -88,15 +88,18 @@ public final class UnityGameServiceNative implements LoginListener {
                         public void onResponse (JSONObject object) {
                             try {
 
-                                StartTime = System.currentTimeMillis();
-                                NativeUtil.SetUserLogin(UnityActivity, true);
-                                NativeUtil.SetPlayToken(UnityActivity, object.getString("token"));
-                                currentGame = new Gson().fromJson(object.getString("game"), Game.class);
+                                if (object.getBoolean("status")) {
 
-                                if (IsLogEnable)
-                                    Log.d(TAG, "Success");
+                                    StartTime = System.currentTimeMillis();
+                                    NativeUtil.SetPlayToken(UnityActivity, object.getString("token"));
+                                    currentGame = new Gson().fromJson(object.getString("game"), Game.class);
 
-                                InitCallback.OnCallback("Success");
+                                    if (IsLogEnable)
+                                        Log.d(TAG, "Success");
+
+                                    InitCallback.OnCallback("Success");
+
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

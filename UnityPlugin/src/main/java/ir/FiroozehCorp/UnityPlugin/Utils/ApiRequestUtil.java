@@ -132,14 +132,7 @@ public final class ApiRequestUtil {
                 , URLs.Start, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse (JSONObject jsonObject) {
-                try {
-                    String token = jsonObject.getString("token");
-                    NativeUtil.SetPlayToken(activity, token);
-                    listener.onResponse(jsonObject);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                listener.onResponse(jsonObject);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -150,7 +143,8 @@ public final class ApiRequestUtil {
                         if (UnityGameServiceNative.IsLogEnable)
                             Log.d(TAG, "UpdatePlayTokenAsyncError->" + object.toString());
                         listener.onError(object.getString("msg"));
-                    } catch (Exception ignored) {
+                    } catch (Exception e) {
+                        listener.onError("Exception : " + e.toString());
                     }
                 } else listener.onError("ServerError");
             }

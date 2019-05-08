@@ -19,7 +19,8 @@ int id editTextPassword 0x7f0c0005
 int id editTextUserName 0x7f0c0006
 int id logo 0x7f0c0007
 int id register 0x7f0c0008
-int id textView29 0x7f0c0009
+int id scroll 0x7f0c0009
+int id textView29 0x7f0c000a
 int layout login_dialog 0x7f0f0001
 int string AboutUs 0x7f150001
 int string Achivments 0x7f150002
