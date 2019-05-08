@@ -26,7 +26,7 @@ public final class DialogUtil {
 
             builder.setPositiveButton("کافه بازار", null);
             builder.setNegativeButton("دریافت مستقیم", null);
-            builder.setNeutralButton("بیخیال", null);
+            builder.setNeutralButton("ورود بدون نصب", null);
 
 
             final AlertDialog dialog = builder.create();
@@ -117,6 +117,7 @@ public final class DialogUtil {
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow (DialogInterface _dialog) {
+
                     Button getServiceـBazaar = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                     Button getServiceـDirect = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
 

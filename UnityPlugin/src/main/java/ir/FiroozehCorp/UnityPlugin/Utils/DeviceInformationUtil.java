@@ -104,5 +104,15 @@ public final class DeviceInformationUtil {
         return size;
     }
 
+    public static boolean isGameServiceInstalled (Activity activity) {
+        try {
+            activity.getPackageManager().getPackageInfo("ir.FiroozehCorp.GameService", 0);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
 
 }
