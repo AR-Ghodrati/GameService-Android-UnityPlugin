@@ -1,6 +1,7 @@
 package ir.FiroozehCorp.UnityPlugin.Utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -28,7 +29,7 @@ public final class ApiRequestUtil {
     private static final String TAG = "ApiRequestUtil";
 
     public static void loginUser (
-            Activity activity
+            Context context
             , String email
             , String pass
             , final JsonObjectCallbackListener listener) {
@@ -64,12 +65,12 @@ public final class ApiRequestUtil {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         request.setShouldCache(false);
 
-        Volley.newRequestQueue(activity).add(request);
+        Volley.newRequestQueue(context).add(request);
 
     }
 
     public static void registerUser (
-            Activity activity
+            Context context
             , String UserName
             , String email
             , String pass
@@ -107,7 +108,7 @@ public final class ApiRequestUtil {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         request.setShouldCache(false);
 
-        Volley.newRequestQueue(activity).add(request);
+        Volley.newRequestQueue(context).add(request);
 
     }
 

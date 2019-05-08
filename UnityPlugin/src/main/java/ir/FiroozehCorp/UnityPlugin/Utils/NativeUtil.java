@@ -1,6 +1,5 @@
 package ir.FiroozehCorp.UnityPlugin.Utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -10,37 +9,37 @@ public final class NativeUtil {
 
     private static final String PrefName = "FiroozehGameService";
 
-    public static boolean IsUserLogin (Activity activity) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences(PrefName, Context.MODE_PRIVATE);
+    public static boolean IsUserLogin (Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean("IsUserLogin", false);
     }
 
-    public static void SetUserLogin (Activity activity, boolean isLogin) {
-        SharedPreferences.Editor editor = activity.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
+    public static void SetUserLogin (Context context, boolean isLogin) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
         editor.putBoolean("IsUserLogin", isLogin);
         editor.apply();
     }
 
-    private static String SetKey (Activity activity) {
-        SharedPreferences.Editor editor = activity.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
+    private static String SetKey (Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
         String key = GenerateRandomString(10);
         editor.putString("Key", key);
         editor.apply();
         return key;
     }
 
-    private static String getKey (Activity activity) {
-        SharedPreferences sharedPreferences = activity.getSharedPreferences(PrefName, Context.MODE_PRIVATE);
+    private static String getKey (Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE);
         return sharedPreferences.getString("Key", null);
     }
 
 
-    public static void SetPlayToken (Activity activity, String Token) {
-        SharedPreferences.Editor editor = activity.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
+    public static void SetPlayToken (Context context, String Token) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
 
-        String key = getKey(activity);
+        String key = getKey(context);
         if (key == null)
-            key = SetKey(activity);
+            key = SetKey(context);
 
         try {
             SecretKey secretKey = EncryptionUtil.generateKey(key);
@@ -53,14 +52,14 @@ public final class NativeUtil {
         }
     }
 
-    public static String GetPlayToken (Activity activity) {
+    public static String GetPlayToken (Context context) {
 
-        SharedPreferences sharedPreferences = activity.getSharedPreferences(PrefName, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("Token", null);
 
         if (token != null) {
 
-            String key = getKey(activity);
+            String key = getKey(context);
             if (key != null) {
                 try {
                     SecretKey secretKey = EncryptionUtil.generateKey(key);

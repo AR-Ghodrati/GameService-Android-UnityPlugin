@@ -1,7 +1,6 @@
 package ir.FiroozehCorp.UnityPlugin.Utils;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
@@ -21,8 +20,8 @@ public final class ConnectivityUtil {
     }
 
     @SuppressLint ("MissingPermission")
-    public static boolean isNetworkConnected (Activity activity) {
-        ConnectivityManager cm = (ConnectivityManager) activity.
+    public static boolean isNetworkConnected (Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm != null && cm.getActiveNetworkInfo() != null;
     }
