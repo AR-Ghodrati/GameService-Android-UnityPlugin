@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class LoginDialog extends Dialog {
     private Button login, register;
     private EditText Email, UserName, Password;
     private TextView Description;
+    private ScrollView scrollView;
 
     public void setListener (LoginListener listener) {
         this.listener = listener;
@@ -55,6 +57,7 @@ public class LoginDialog extends Dialog {
         setCancelable(false);
 
 
+        scrollView = findViewById(R.id.scroll);
         login = findViewById(R.id.buttonLogin);
         register = findViewById(R.id.register);
 
@@ -69,7 +72,7 @@ public class LoginDialog extends Dialog {
             @Override
             public void onClick (View v) {
                 if (!CheckData) {
-                    IsLoginMod = false;
+                    IsLoginMod = true;
 
                     Email.setVisibility(View.VISIBLE);
                     UserName.setVisibility(View.GONE);
@@ -142,6 +145,11 @@ public class LoginDialog extends Dialog {
 
             if (ConnectivityUtil.isNetworkConnected(getContext())) {
                 CanDissmised = false;
+
+                register.setAlpha(.2f);
+                register.setEnabled(false);
+
+
                 ApiRequestUtil.registerUser(getContext(), username, email, pass, new JsonObjectCallbackListener() {
                     @Override
                     public void onResponse (JSONObject object) {
@@ -149,12 +157,21 @@ public class LoginDialog extends Dialog {
                         try {
                             if (object.getBoolean("status")) {
                                 UnityGameServiceNative.StartTime = System.currentTimeMillis();
+
+                                NativeUtil.SetUserLogin(getContext(), true);
                                 NativeUtil.SetPlayToken(getContext(), object.getString("token"));
+
                                 Toast.makeText(getContext(), "حساب کاربری شما با موفقیت ساخته شد", Toast.LENGTH_LONG).show();
                                 listener.onFinish();
                                 dismiss();
                             }
                         } catch (JSONException e) {
+
+                            register.setAlpha(1f);
+                            register.setEnabled(true);
+
+                            scrollView.fullScroll(ScrollView.FOCUS_UP);
+
                             e.printStackTrace();
                         }
                     }
@@ -162,26 +179,24 @@ public class LoginDialog extends Dialog {
                     @Override
                     public void onError (String error) {
 
+                        register.setAlpha(1f);
+                        register.setEnabled(true);
+                        scrollView.fullScroll(ScrollView.FOCUS_UP);
+
                         if (UnityGameServiceNative.IsLogEnable)
                             Log.e(getClass().getName(), error);
 
-                        switch (error) {
-                            case ErrorList.WrongPassword:
-                                Password.setError("رمز وارد شده درست نمی باشد");
-                                Password.requestFocus();
-                                break;
-                            case ErrorList.EmailExist:
-                                Email.setError("این ایمیل وجود دارد");
-                                Email.requestFocus();
-                                break;
-                            case ErrorList.UserNameExist:
-                                UserName.setError("این نام مستعار وجود دارد");
-                                UserName.requestFocus();
-                                break;
-                            case ErrorList.InvalidInput:
-                                Toast.makeText(getContext(), "خطایی رخ داد،ورودی های خود را بررسی کنید", Toast.LENGTH_LONG).show();
-                                break;
-                        }
+                        if (error.contains(ErrorList.WrongPassword)) {
+                            Password.setError("رمز وارد شده درست نمی باشد");
+                            Password.requestFocus();
+                        } else if (error.contains(ErrorList.EmailExist)) {
+                            Email.setError("این ایمیل وجود دارد");
+                            Email.requestFocus();
+                        } else if (error.contains(ErrorList.UserNameExist)) {
+                            UserName.setError("این نام مستعار وجود دارد");
+                            UserName.requestFocus();
+                        } else if (error.contains(ErrorList.InvalidInput))
+                            Toast.makeText(getContext(), "خطایی رخ داد،ورودی های خود را بررسی کنید", Toast.LENGTH_LONG).show();
 
                         listener.onError(error);
                     }
@@ -212,6 +227,10 @@ public class LoginDialog extends Dialog {
 
             if (ConnectivityUtil.isNetworkConnected(getContext())) {
                 CanDissmised = false;
+
+                login.setAlpha(.2f);
+                login.setEnabled(false);
+
                 ApiRequestUtil.loginUser(getContext(), email, pass, new JsonObjectCallbackListener() {
                     @Override
                     public void onResponse (JSONObject object) {
@@ -219,36 +238,45 @@ public class LoginDialog extends Dialog {
                         try {
                             if (object.getBoolean("status")) {
                                 UnityGameServiceNative.StartTime = System.currentTimeMillis();
+
+                                NativeUtil.SetUserLogin(getContext(), true);
                                 NativeUtil.SetPlayToken(getContext(), object.getString("token"));
+
                                 Toast.makeText(getContext(), "وارد شدید!", Toast.LENGTH_LONG).show();
                                 listener.onFinish();
                                 dismiss();
                             }
                         } catch (JSONException e) {
+
+                            login.setAlpha(1f);
+                            login.setEnabled(true);
+                            scrollView.fullScroll(ScrollView.FOCUS_UP);
+
                             e.printStackTrace();
                         }
                     }
 
                     @Override
                     public void onError (String error) {
+
+                        login.setAlpha(1f);
+                        login.setEnabled(true);
+
+                        scrollView.fullScroll(ScrollView.FOCUS_UP);
+
                         CanDissmised = true;
                         if (UnityGameServiceNative.IsLogEnable)
                             Log.e(getClass().getName(), error);
 
 
-                        switch (error) {
-                            case ErrorList.WrongPassword:
-                                Password.setError("رمز وارد شده درست نمی باشد");
-                                Password.requestFocus();
-                                break;
-                            case ErrorList.EmailNotFound:
-                                Email.setError("این ایمیل وجود ندارد");
-                                Email.requestFocus();
-                                break;
-                            case ErrorList.InvalidInput:
-                                Toast.makeText(getContext(), "خطایی رخ داد،ورودی های خود را بررسی کنید", Toast.LENGTH_LONG).show();
-                                break;
-                        }
+                        if (error.contains(ErrorList.WrongPassword)) {
+                            Password.setError("رمز وارد شده درست نمی باشد");
+                            Password.requestFocus();
+                        } else if (error.contains(ErrorList.EmailNotFound)) {
+                            Email.setError("این ایمیل وجود ندارد");
+                            Email.requestFocus();
+                        } else if (error.contains(ErrorList.InvalidInput))
+                            Toast.makeText(getContext(), "خطایی رخ داد،ورودی های خود را بررسی کنید", Toast.LENGTH_LONG).show();
 
                         listener.onError(error);
                     }
@@ -263,6 +291,7 @@ public class LoginDialog extends Dialog {
     public void onBackPressed () {
 
         if (CheckData) {
+
             CheckData = false;
 
             Email.post(new Runnable() {

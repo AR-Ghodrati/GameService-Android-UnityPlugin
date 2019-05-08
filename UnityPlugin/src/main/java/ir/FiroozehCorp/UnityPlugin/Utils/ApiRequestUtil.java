@@ -98,6 +98,7 @@ public final class ApiRequestUtil {
                             Log.d(TAG, "registerUserError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
+                        listener.onError("Exception : " + ignored.toString());
                     }
                 } else listener.onError("ServerError");
             }
@@ -122,7 +123,7 @@ public final class ApiRequestUtil {
 
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("token", "register");
+        params.put("token", NativeUtil.GetPlayToken(activity));
         params.put("game", clientId);
         params.put("secret", clientSecret);
         params.put("system_info", sysInfo.ToJSON());
@@ -134,10 +135,10 @@ public final class ApiRequestUtil {
                 try {
                     String token = jsonObject.getString("token");
                     NativeUtil.SetPlayToken(activity, token);
+                    listener.onResponse(jsonObject);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                } finally {
-                    listener.onResponse(jsonObject);
                 }
             }
         }, new Response.ErrorListener() {

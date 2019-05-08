@@ -89,6 +89,7 @@ public final class UnityGameServiceNative implements LoginListener {
                             try {
 
                                 StartTime = System.currentTimeMillis();
+                                NativeUtil.SetUserLogin(UnityActivity, true);
                                 NativeUtil.SetPlayToken(UnityActivity, object.getString("token"));
                                 currentGame = new Gson().fromJson(object.getString("game"), Game.class);
 
@@ -119,7 +120,7 @@ public final class UnityGameServiceNative implements LoginListener {
     }
 
     private void loginUser () {
-        LoginDialog dialog = new LoginDialog(context);
+        LoginDialog dialog = new LoginDialog(UnityActivity);
         dialog.setListener(this);
         dialog.show();
     }

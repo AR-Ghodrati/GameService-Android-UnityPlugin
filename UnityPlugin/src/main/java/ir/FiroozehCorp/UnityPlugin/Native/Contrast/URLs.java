@@ -2,7 +2,7 @@ package ir.FiroozehCorp.UnityPlugin.Native.Contrast;
 
 public final class URLs {
 
-    public static final String BaseURL = "https://gamesservice.ir";
+    public static final String BaseURL = "https://gameservice.liara.run";
 
     public static final String LoginUser = BaseURL + "/Auth/app/login";
     public static final String Start = BaseURL + "/Auth/start";

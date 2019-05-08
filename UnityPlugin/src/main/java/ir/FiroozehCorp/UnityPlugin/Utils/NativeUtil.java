@@ -22,7 +22,7 @@ public final class NativeUtil {
 
     private static String SetKey (Context context) {
         SharedPreferences.Editor editor = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
-        String key = GenerateRandomString(10);
+        String key = GenerateRandomString(32);
         editor.putString("Key", key);
         editor.apply();
         return key;
@@ -43,12 +43,10 @@ public final class NativeUtil {
 
         try {
             SecretKey secretKey = EncryptionUtil.generateKey(key);
-            byte[] data = EncryptionUtil.encryptString(Token, secretKey);
-            editor.putString("Token", new String(data, "UTF-8"));
-        } catch (Exception e) {
-
-        } finally {
+            editor.putString("Token", EncryptionUtil.encryptString(Token, secretKey));
             editor.apply();
+
+        } catch (Exception ignored) {
         }
     }
 
@@ -63,7 +61,7 @@ public final class NativeUtil {
             if (key != null) {
                 try {
                     SecretKey secretKey = EncryptionUtil.generateKey(key);
-                    return EncryptionUtil.decryptString(token.getBytes("UTF-8"), secretKey);
+                    return EncryptionUtil.decryptString(token, secretKey);
                 } catch (Exception e) {
 
                 }

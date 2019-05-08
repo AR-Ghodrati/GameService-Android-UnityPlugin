@@ -20,6 +20,7 @@ id editTextPassword
 id editTextUserName
 id logo
 id register
+id scroll
 id textView29
 layout login_dialog
 string AboutUs

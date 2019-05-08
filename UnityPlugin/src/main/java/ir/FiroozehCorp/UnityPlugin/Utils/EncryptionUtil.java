@@ -1,5 +1,7 @@
 package ir.FiroozehCorp.UnityPlugin.Utils;
 
+import android.util.Base64;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -18,21 +20,21 @@ public final class EncryptionUtil {
         return new SecretKeySpec(Key.getBytes(), "AES");
     }
 
-    public static byte[] encryptString (String message, SecretKey secret)
+    public static String encryptString (String message, SecretKey secret)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidParameterSpecException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
         /* Encrypt the message. */
         Cipher cipher;
-        cipher = Cipher.getInstance("AES/PKCS5Padding");
+        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, secret);
-        return cipher.doFinal(message.getBytes());
+        return Base64.encodeToString(cipher.doFinal(message.getBytes("UTF-8")), Base64.NO_WRAP);
     }
 
-    public static String decryptString (byte[] cipherText, SecretKey secret)
+    public static String decryptString (String encrypted, SecretKey secret)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
         /* Decrypt the message, given derived encContentValues and initialization vector. */
         Cipher cipher;
-        cipher = Cipher.getInstance("AES/PKCS5Padding");
+        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, secret);
-        return new String(cipher.doFinal(cipherText), "UTF-8");
+        return new String(cipher.doFinal(Base64.decode(encrypted, Base64.NO_WRAP)), "UTF-8");
     }
 }

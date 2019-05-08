@@ -6,104 +6,112 @@
     android:background="@drawable/bg_mobile"
     android:gravity="center">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:layout_gravity="center"
+        android:foregroundGravity="center">
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/logo" />
-
-        <TextView
-            android:id="@+id/textView29"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="گیم سرویس"
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/des"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_horizontal"
-            android:text="به حساب کاربری خود وارد شوید یا ثبت نام کنید"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/editTextUserName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:hint="نام مستعار"
-            android:inputType="textPersonName"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHighlight="@color/text_hint"
-            android:textColorHint="@color/text_hint"
-            android:visibility="gone" />
+            android:orientation="vertical"
+            android:padding="50sp"
+            android:visibility="visible">
 
-        <EditText
-            android:id="@+id/editTextEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="ایمیل"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHighlight="@color/text_hint"
-            android:textColorHint="@color/text_hint"
-            android:visibility="gone" />
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo" />
 
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="رمز عبور"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHighlight="@color/text_hint"
-            android:textColorHint="@color/text_hint"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="گیم سرویس"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/buttonLogin"
-            style="@style/DefaultButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_primary"
-            android:text="@string/login" />
+            <TextView
+                android:id="@+id/des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_horizontal"
+                android:text="به حساب کاربری خود وارد شوید یا ثبت نام کنید"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/register"
-            style="@style/DefaultButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_primary"
-            android:text="@string/register" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/editTextUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="نام مستعار"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/text_hint"
+                android:textColorHint="@color/text_hint"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="ایمیل"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/text_hint"
+                android:textColorHint="@color/text_hint"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="رمز عبور"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/text_hint"
+                android:textColorHint="@color/text_hint"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/buttonLogin"
+                style="@style/DefaultButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_primary"
+                android:text="@string/login" />
+
+            <Button
+                android:id="@+id/register"
+                style="@style/DefaultButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_primary"
+                android:text="@string/register" />
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
