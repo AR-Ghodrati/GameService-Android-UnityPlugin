@@ -16,7 +16,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Display;
 
-import ir.FiroozehCorp.UnityPlugin.Models.SysInfo;
+import ir.FiroozehCorp.UnityPlugin.App.Models.SysInfo;
 
 /**
  * Created by Alireza Ghodrati on 16/10/2018 in

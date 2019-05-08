@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import ir.FiroozehCorp.UnityPlugin.Interfaces.UpdateUtilListener;
+import ir.FiroozehCorp.UnityPlugin.App.Interfaces.UpdateUtilListener;
 
 public final class UpdateUtil {
 

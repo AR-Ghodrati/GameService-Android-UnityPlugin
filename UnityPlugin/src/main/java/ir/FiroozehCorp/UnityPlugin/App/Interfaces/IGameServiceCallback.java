@@ -1,4 +1,4 @@
-package ir.FiroozehCorp.UnityPlugin.Interfaces;
+package ir.FiroozehCorp.UnityPlugin.App.Interfaces;
 
 /**
  * Created by Alireza Ghodrati on 05/10/2018 in

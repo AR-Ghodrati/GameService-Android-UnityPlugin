@@ -9,8 +9,8 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 
-import ir.FiroozehCorp.UnityPlugin.Interfaces.InstallDialogListener;
-import ir.FiroozehCorp.UnityPlugin.Interfaces.UpdateDialogListener;
+import ir.FiroozehCorp.UnityPlugin.App.Interfaces.InstallDialogListener;
+import ir.FiroozehCorp.UnityPlugin.App.Interfaces.UpdateDialogListener;
 
 public final class DialogUtil {
 

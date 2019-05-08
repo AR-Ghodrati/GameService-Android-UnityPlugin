@@ -1,4 +1,4 @@
-package ir.FiroozehCorp.UnityPlugin.Handlers.App;
+package ir.FiroozehCorp.UnityPlugin.App.Handlers;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -12,8 +12,8 @@ import android.util.Log;
 
 import ir.FiroozehCorp.GameService.IAsyncGameServiceCallback;
 import ir.FiroozehCorp.GameService.IGameServiceInterface;
-import ir.FiroozehCorp.UnityPlugin.Interfaces.IGameServiceCallback;
-import ir.FiroozehCorp.UnityPlugin.Interfaces.InstallDialogListener;
+import ir.FiroozehCorp.UnityPlugin.App.Interfaces.IGameServiceCallback;
+import ir.FiroozehCorp.UnityPlugin.App.Interfaces.InstallDialogListener;
 import ir.FiroozehCorp.UnityPlugin.Utils.DeviceInformationUtil;
 
 /**

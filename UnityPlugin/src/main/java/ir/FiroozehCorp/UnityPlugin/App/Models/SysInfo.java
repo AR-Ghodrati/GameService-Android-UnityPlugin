@@ -1,4 +1,4 @@
-package ir.FiroozehCorp.UnityPlugin.Models;
+package ir.FiroozehCorp.UnityPlugin.App.Models;
 
 import android.content.res.Configuration;
 
