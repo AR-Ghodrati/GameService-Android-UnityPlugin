@@ -29,6 +29,7 @@ public final class UnityGameService implements InstallDialogListener {
     private GameService gameService;
     private Context context;
     private Activity UnityActivity;
+    private boolean isLogEnable;
 
     private String clientId, clientSecret;
     private IGameServiceCallback InitCallback;
@@ -49,7 +50,10 @@ public final class UnityGameService implements InstallDialogListener {
         this.UnityActivity = activity;
     }
 
-    public void InitGameService (String clientId, String clientSecret
+    public void InitGameService (
+            String clientId
+            , String clientSecret
+            , boolean isLogEnable
             , IGameServiceCallback callback) {
 
         if (clientId != null && clientSecret != null
@@ -57,10 +61,16 @@ public final class UnityGameService implements InstallDialogListener {
             this.clientId = clientId;
             this.clientSecret = clientSecret;
             this.InitCallback = callback;
+            this.isLogEnable = isLogEnable;
 
             initGameService(InitCallback);
 
-        } else callback.OnError("InvalidInputs");
+        } else {
+            if (isLogEnable)
+                Log.e(TAG, "InvalidInputs");
+
+            callback.OnError("InvalidInputs");
+        }
     }
 
     public void DisposeService () {
@@ -70,7 +80,9 @@ public final class UnityGameService implements InstallDialogListener {
     private void releaseGameService () {
         this.context.unbindService(gameService);
         gameService = null;
-        Log.d(TAG, "releaseGameService(): unbound.");
+
+        if (isLogEnable)
+            Log.d(TAG, "releaseGameService(): unbound.");
     }
 
     private void initGameService (IGameServiceCallback callback) {
@@ -78,7 +90,8 @@ public final class UnityGameService implements InstallDialogListener {
         try {
             if (isPackageInstalled(context.getPackageManager())) {
 
-                Log.e(TAG, "initGameService()");
+                if (isLogEnable)
+                    Log.e(TAG, "initGameService()");
 
                 gameService = new GameService();
 
@@ -87,11 +100,17 @@ public final class UnityGameService implements InstallDialogListener {
                 i.setPackage("ir.FiroozehCorp.GameService");
 
                 boolean ret = context.bindService(i, gameService, Context.BIND_AUTO_CREATE);
-                if (!ret)
+                if (!ret) {
+                    if (isLogEnable)
+                        Log.e(TAG, "GameServiceNotBounded");
+
                     callback.OnError("GameServiceNotBounded");
+                }
             }
         } catch (Exception e) {
-            Log.e(TAG, "initGameService() Exception:" + e.toString());
+            if (isLogEnable)
+                Log.e(TAG, "initGameService() Exception:" + e.toString());
+
             callback.OnError("GameServiceException");
         }
     }
@@ -100,6 +119,9 @@ public final class UnityGameService implements InstallDialogListener {
 
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -110,12 +132,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "GetAchievementError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestAchievement(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -124,6 +152,9 @@ public final class UnityGameService implements InstallDialogListener {
 
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -134,12 +165,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "GetSDKVersionError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestVersion(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -148,6 +185,9 @@ public final class UnityGameService implements InstallDialogListener {
 
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -158,12 +198,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "GetLeaderBoardsError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestLeaderBoards(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -171,6 +217,9 @@ public final class UnityGameService implements InstallDialogListener {
     public void GetLeaderBoardData (String LeaderBoardID, final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -181,12 +230,19 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "GetLeaderBoardDataError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestLeaderBoardData(LeaderBoardID, iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("Exception:" + e.toString());
         }
     }
@@ -194,6 +250,10 @@ public final class UnityGameService implements InstallDialogListener {
     public void ShowLeaderBoardUI (final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
+
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -204,12 +264,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "ShowLeaderBoardUIError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.ShowLeaderBoardUI(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("Exception:" + e.toString());
         }
     }
@@ -217,6 +283,9 @@ public final class UnityGameService implements InstallDialogListener {
     public void ShowAchievementUI (final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -227,12 +296,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "ShowAchievementUIError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.ShowAchievementUI(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -240,6 +315,9 @@ public final class UnityGameService implements InstallDialogListener {
     public void ShowSurveyUI (final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -250,12 +328,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "ShowSurveyUIError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.ShowSurveyUI(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -263,6 +347,9 @@ public final class UnityGameService implements InstallDialogListener {
     public void ShowGamePageUI (final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -273,12 +360,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "ShowGamePageUIError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.ShowGamePageUI(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -287,6 +380,9 @@ public final class UnityGameService implements InstallDialogListener {
 
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -297,12 +393,19 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "UnlockAchievementError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestUnlockAchievement(AchievementID, HaveNotification, iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -311,6 +414,9 @@ public final class UnityGameService implements InstallDialogListener {
 
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -321,12 +427,19 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "SubmitScore: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestSubmitScore(Id, Score, HaveNotification, iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -335,6 +448,10 @@ public final class UnityGameService implements InstallDialogListener {
 
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -345,12 +462,19 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "GetLastSaveError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestGetData(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -359,6 +483,9 @@ public final class UnityGameService implements InstallDialogListener {
 
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -369,12 +496,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "SaveDataError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestSaveData(Name, Description, Cover, SaveData, iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -382,6 +515,9 @@ public final class UnityGameService implements InstallDialogListener {
     public void RemoveLastSave (final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -392,12 +528,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "RemoveLastSaveError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestRemoveSaveData(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -405,6 +547,9 @@ public final class UnityGameService implements InstallDialogListener {
     public void GetUserData (final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -415,12 +560,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "GetUserDataError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestGetUserData(iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -428,6 +579,10 @@ public final class UnityGameService implements InstallDialogListener {
     public void DownloadObbDataFile (String ObbDataTAG, final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+
                 callback.OnError("UnreachableService");
             } else {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
@@ -438,12 +593,18 @@ public final class UnityGameService implements InstallDialogListener {
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "DownloadObbDataFileError: " + Error);
+
                         callback.OnError(Error);
                     }
                 };
                 gameServiceInterface.RequestDownloadObbDataFile(ObbDataTAG, iAsyncGameServiceCallback);
             }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
             callback.OnError("GameServiceFatalException");
         }
     }
@@ -519,12 +680,10 @@ public final class UnityGameService implements InstallDialogListener {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-            Log.e(TAG, "GameService:Connected");
         }
 
         public void onServiceDisconnected (ComponentName name) {
             gameServiceInterface = null;
-            Log.e(TAG, "GameServiceTest(): Disconnected");
         }
     }
 }

@@ -36,6 +36,8 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
     private IGameServiceCallback loginCheck;
     private boolean CheckAppStatus = true;
     private boolean CheckOptionalUpdate = true;
+    private boolean isLogEnable;
+
 
 
     public UnityLoginService () {
@@ -56,11 +58,14 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
     public void InitLoginService (
             boolean CheckAppStatus
             , boolean CheckOptionalUpdate
+            , boolean isLogEnable
             , IGameServiceCallback callback) {
 
         this.loginCheck = callback;
         this.CheckAppStatus = CheckAppStatus;
         this.CheckOptionalUpdate = CheckOptionalUpdate;
+        this.isLogEnable = isLogEnable;
+
         initLoginService(callback);
 
     }
@@ -100,8 +105,12 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
         i.setPackage("ir.FiroozehCorp.GameService");
         boolean ret = context.bindService(i, loginTestService, Context.BIND_AUTO_CREATE);
 
-        if (!ret)
+        if (!ret) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceNotBounded");
+
             callback.OnError("GameServiceNotBounded");
+        }
     }
 
     private void releaseLoginService () {
@@ -114,8 +123,16 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
         try {
             if (loginGameServiceInterface != null)
                 check.isLoggedIn(loginGameServiceInterface.isLoggedIn());
-            else check.OnError("UnreachableService");
+            else {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+                check.OnError("UnreachableService");
+            }
         } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceException , " + e.toString());
+
             check.OnError("GameServiceException");
         }
     }
@@ -131,13 +148,24 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
 
                     @Override
                     public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "ShowLoginUIError : " + Error);
+
+
                         check.OnError(Error);
                     }
                 };
                 loginGameServiceInterface.ShowLoginUI(iAsyncGameServiceCallback);
-            } else check.OnError("UnreachableService");
+            } else {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+                check.OnError("UnreachableService");
+            }
         } catch (Exception e) {
-            Log.e(getClass().getName(), e.toString());
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceException , " + e.toString());
+
             check.OnError("GameServiceException");
         }
     }
@@ -162,11 +190,19 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
 
     @Override
     public void onDismiss () {
+        if (isLogEnable)
+            Log.e(TAG, "GameServiceInstallDialogDismiss");
+
         loginCheck.OnError("GameServiceInstallDialogDismiss");
     }
 
     @Override
     public void onUpdateDismiss () {
+
+        if (isLogEnable)
+            Log.e(TAG, "GameServiceUpdateDialogDismiss");
+
+
         loginCheck.OnError("GameServiceUpdateDialogDismiss");
         _initLoginService(loginCheck);
     }
@@ -193,12 +229,11 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
             loginGameServiceInterface = ILoginGameServiceInterface.Stub
                     .asInterface(boundService);
             loginCheck.OnCallback("Success");
-            Log.e(TAG, "LoginService(): Connected");
+
         }
 
         public void onServiceDisconnected (ComponentName name) {
             loginGameServiceInterface = null;
-            Log.e(TAG, "LoginService(): Disconnected");
         }
     }
 
