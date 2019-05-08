@@ -3,7 +3,6 @@ package ir.FiroozehCorp.UnityPlugin.Utils;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
 
 import javax.crypto.BadPaddingException;
@@ -15,8 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public final class EncryptionUtil {
 
-    public static SecretKey generateKey (String Key)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static SecretKey generateKey (String Key) {
         return new SecretKeySpec(Key.getBytes(), "AES");
     }
 

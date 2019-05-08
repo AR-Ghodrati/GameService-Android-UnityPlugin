@@ -43,11 +43,11 @@ public final class TextUtil {
                 || Pattern.compile(USERNAME_PATTERN_FA).matcher(userName).matches();
     }
 
-    private static boolean IsPassWordValid (String passWord) {
+    public static boolean IsPassWordValid (String passWord) {
         return Pattern.compile(PASS_PATTERN).matcher(passWord).matches();
     }
 
-    private static boolean IsPhoneValid (String phone) {
+    public static boolean IsPhoneValid (String phone) {
         return !phone.isEmpty() && phone.length() == 11;
     }
 

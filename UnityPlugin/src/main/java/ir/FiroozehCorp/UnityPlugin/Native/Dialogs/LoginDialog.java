@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ir.FiroozehCorp.UnityPlugin.R;
+import ir.FiroozehCorp.UnityPlugin.Utils.TextUtil;
 
 public class LoginDialog extends Dialog {
 
@@ -109,6 +110,17 @@ public class LoginDialog extends Dialog {
         if (email.isEmpty()) {
             Email.setError("ایمیل خود را وارد کنید");
             Email.requestFocus();
+        } else if (!TextUtil.IsEmailValid(email)) {
+            Email.setError("یک ایمیل معتبر وارد کنید");
+            Email.requestFocus();
+        } else if (pass.isEmpty()) {
+            Password.setError("رمز عبور خود را وارد کنید");
+            Password.requestFocus();
+        } else if (!TextUtil.IsPassWordValid(pass)) {
+            Password.setError("رمز عبور معتبر وارد کنید \n (رمز عبور باید حداقل 5 کارکتر باشد)");
+            Password.requestFocus();
+        } else {
+
         }
     }
 

@@ -116,7 +116,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 28 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: __local_aars__:/Users/alirezaghodrati/.gradle/caches/transforms-1/files-1.1/MaterialStyledDialogs-2.1.aar/60164ff6142745a7a51a65adbdb867c5:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:/Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/lib/volley.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:/Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/lib/gson-2.8.5.jar:unspecified@jar" level="project" />
   </component>
 </module>
