@@ -3,6 +3,8 @@ package ir.FiroozehCorp.UnityPlugin.Native.Handlers;
 import android.app.Activity;
 import android.content.Context;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,6 +12,7 @@ import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.LoginDialog;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.IGameServiceCallback;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonObjectCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.LoginListener;
+import ir.FiroozehCorp.UnityPlugin.Native.Models.Game;
 import ir.FiroozehCorp.UnityPlugin.Utils.ApiRequestUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.ConnectivityUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.DeviceInformationUtil;
@@ -23,6 +26,7 @@ public final class UnityGameServiceNative implements LoginListener {
     public static Long StartTime;
     private String clientId, clientSecret;
     private IGameServiceCallback InitCallback;
+    private Game currentGame;
 
 
     private Context context;
@@ -72,9 +76,12 @@ public final class UnityGameServiceNative implements LoginListener {
                         @Override
                         public void onResponse (JSONObject object) {
                             try {
+
                                 StartTime = System.currentTimeMillis();
                                 NativeUtil.SetPlayToken(UnityActivity, object.getString("token"));
+                                currentGame = new Gson().fromJson(object.getString("game"), Game.class);
 
+                                InitCallback.OnCallback("Success");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -82,7 +89,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
                         @Override
                         public void onError (String error) {
-
+                            InitCallback.OnError("GameServiceException");
                         }
                     });
 
