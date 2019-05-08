@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">GameService</string>
+    <string name="email">ایمیل</string>
+    <string name="password">رمز عبور</string>
+    <string name="login">ورود</string>
+    <string name="username">نام کاربر</string>
+    <string name="register">ثبت نام</string>
+    <string name="back_to_login">حساب کاربری دارم</string>
+    <string name="Open">Open</string>
+    <string name="Close">Close</string>
+    <string name="Games">سیو ها</string>
+    <string name="Achivments">دستاورد ها</string>
+    <string name="LeaderBoard">لیدربورد ها</string>
+    <string name="Setting">تنظیمات</string>
+    <string name="AboutUs">درباره</string>
+    <string name="search_hint">بازی مورد نظر خود را جستجو کنید</string>
+</resources>
