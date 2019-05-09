@@ -2,7 +2,6 @@ package ir.FiroozehCorp.UnityPlugin.Utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -22,6 +21,8 @@ import ir.FiroozehCorp.UnityPlugin.Native.Contrast.URLs;
 import ir.FiroozehCorp.UnityPlugin.Native.Handlers.UnityGameServiceNative;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonArrayCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonObjectCallbackListener;
+
+import static ir.FiroozehCorp.UnityPlugin.Native.Handlers.UnityGameServiceNative.PT;
 
 public final class ApiRequestUtil {
 
@@ -119,7 +120,7 @@ public final class ApiRequestUtil {
 
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("token", NativeUtil.GetPlayToken(activity));
+        params.put("token", NativeUtil.GetJWT(activity));
         params.put("game", clientId);
         params.put("secret", clientSecret);
         params.put("system_info", sysInfo.ToJSON());
@@ -169,8 +170,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "getUserDataError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -180,7 +179,7 @@ public final class ApiRequestUtil {
             @Override
             public Map<String, String> getHeaders () {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", NativeUtil.GetPlayToken(activity));
+                headers.put("x-access-token", PT);
                 return headers;
             }
         };
@@ -219,7 +218,7 @@ public final class ApiRequestUtil {
             @Override
             public Map<String, String> getHeaders () {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", NativeUtil.GetPlayToken(activity));
+                headers.put("x-access-token", PT);
                 return headers;
             }
         };
@@ -262,7 +261,7 @@ public final class ApiRequestUtil {
             @Override
             public Map<String, String> getHeaders () {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", NativeUtil.GetPlayToken(activity));
+                headers.put("x-access-token", PT);
                 return headers;
             }
         };
@@ -281,7 +280,7 @@ public final class ApiRequestUtil {
             , final JsonObjectCallbackListener listener) {
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("token", NativeUtil.GetPlayToken(activity));
+        params.put("token", NativeUtil.GetJWT(activity));
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST
                 , URLs.EarnAchievement + ID, new JSONObject(params), new Response.Listener<JSONObject>() {
@@ -341,7 +340,7 @@ public final class ApiRequestUtil {
             @Override
             public Map<String, String> getHeaders () {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", NativeUtil.GetPlayToken(activity));
+                headers.put("x-access-token", PT);
                 return headers;
             }
         };
@@ -391,7 +390,7 @@ public final class ApiRequestUtil {
             @Override
             public Map<String, String> getHeaders () {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", NativeUtil.GetPlayToken(activity));
+                headers.put("x-access-token", PT);
                 return headers;
             }
         };
@@ -429,7 +428,7 @@ public final class ApiRequestUtil {
             @Override
             public Map<String, String> getHeaders () {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", NativeUtil.GetPlayToken(activity));
+                headers.put("x-access-token", PT);
                 return headers;
             }
         };
@@ -468,7 +467,7 @@ public final class ApiRequestUtil {
             @Override
             public Map<String, String> getHeaders () {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", NativeUtil.GetPlayToken(activity));
+                headers.put("x-access-token", PT);
                 return headers;
             }
         };
@@ -507,7 +506,7 @@ public final class ApiRequestUtil {
             @Override
             public Map<String, String> getHeaders () {
                 HashMap<String, String> headers = new HashMap<>();
-                headers.put("x-access-token", NativeUtil.GetPlayToken(activity));
+                headers.put("x-access-token", PT);
                 return headers;
             }
         };

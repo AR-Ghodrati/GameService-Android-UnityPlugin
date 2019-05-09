@@ -159,7 +159,7 @@ public class LoginDialog extends Dialog {
                                 UnityGameServiceNative.StartTime = System.currentTimeMillis();
 
                                 NativeUtil.SetUserLogin(getContext(), true);
-                                NativeUtil.SetPlayToken(getContext(), object.getString("token"));
+                                NativeUtil.SetJWT(getContext(), object.getString("token"));
 
                                 Toast.makeText(getContext(), "حساب کاربری شما با موفقیت ساخته شد", Toast.LENGTH_LONG).show();
                                 listener.onFinish();
@@ -240,7 +240,7 @@ public class LoginDialog extends Dialog {
                                 UnityGameServiceNative.StartTime = System.currentTimeMillis();
 
                                 NativeUtil.SetUserLogin(getContext(), true);
-                                NativeUtil.SetPlayToken(getContext(), object.getString("token"));
+                                NativeUtil.SetJWT(getContext(), object.getString("token"));
 
                                 Toast.makeText(getContext(), "وارد شدید!", Toast.LENGTH_LONG).show();
                                 listener.onFinish();

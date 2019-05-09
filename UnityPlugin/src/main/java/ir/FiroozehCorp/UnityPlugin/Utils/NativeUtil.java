@@ -34,7 +34,7 @@ public final class NativeUtil {
     }
 
 
-    public static void SetPlayToken (Context context, String Token) {
+    public static void SetJWT (Context context, String Token) {
         SharedPreferences.Editor editor = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
 
         String key = getKey(context);
@@ -43,17 +43,17 @@ public final class NativeUtil {
 
         try {
             SecretKey secretKey = EncryptionUtil.generateKey(key);
-            editor.putString("Token", EncryptionUtil.encryptString(Token, secretKey));
+            editor.putString("JWT", EncryptionUtil.encryptString(Token, secretKey));
             editor.apply();
 
         } catch (Exception ignored) {
         }
     }
 
-    public static String GetPlayToken (Context context) {
+    public static String GetJWT (Context context) {
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE);
-        String token = sharedPreferences.getString("Token", null);
+        String token = sharedPreferences.getString("JWT", null);
 
         if (token != null) {
 

@@ -34,6 +34,10 @@ public final class UnityGameServiceNative implements LoginListener {
     private Game currentGame;
 
 
+    // Play Token
+    public static String PT;
+
+
     private Context context;
     private Activity UnityActivity;
 
@@ -94,7 +98,7 @@ public final class UnityGameServiceNative implements LoginListener {
                                 if (object.getBoolean("status")) {
 
                                     StartTime = System.currentTimeMillis();
-                                    NativeUtil.SetPlayToken(UnityActivity, object.getString("token"));
+                                    PT = object.getString("token");
                                     currentGame = new Gson().fromJson(object.getString("game"), Game.class);
 
                                     if (IsLogEnable)
