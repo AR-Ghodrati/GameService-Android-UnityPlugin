@@ -40,7 +40,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
 
     private Context context;
-    private Activity UnityActivity;
+    public static Activity UnityActivity;
 
     public UnityGameServiceNative () {
         Instance = this;

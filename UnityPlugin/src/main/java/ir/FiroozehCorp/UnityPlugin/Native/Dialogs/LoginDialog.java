@@ -29,6 +29,7 @@ import ir.FiroozehCorp.UnityPlugin.Utils.TextUtil;
 public class LoginDialog extends Dialog {
 
 
+    private static final String TAG = "LoginDialog";
     private LoginListener listener;
     private boolean IsLoginMod = true;
     private boolean CanDissmised = true;
@@ -168,10 +169,21 @@ public class LoginDialog extends Dialog {
                             }
                         } catch (JSONException e) {
 
-                            register.setAlpha(1f);
-                            register.setEnabled(true);
+                            register.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    register.setAlpha(1f);
+                                    register.setEnabled(true);
+                                }
+                            });
 
-                            scrollView.fullScroll(ScrollView.FOCUS_UP);
+
+                            scrollView.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    scrollView.fullScroll(ScrollView.FOCUS_UP);
+                                }
+                            });
 
                             e.printStackTrace();
                         }
@@ -180,22 +192,49 @@ public class LoginDialog extends Dialog {
                     @Override
                     public void onError (String error) {
 
-                        register.setAlpha(1f);
-                        register.setEnabled(true);
-                        scrollView.fullScroll(ScrollView.FOCUS_UP);
+
+                        register.post(new Runnable() {
+                            @Override
+                            public void run () {
+                                register.setAlpha(1f);
+                                register.setEnabled(true);
+                            }
+                        });
+                        scrollView.post(new Runnable() {
+                            @Override
+                            public void run () {
+                                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                            }
+                        });
+
 
                         if (UnityGameServiceNative.IsLogEnable)
-                            Log.e(getClass().getName(), error);
+                            Log.e(TAG, error);
 
                         if (error.contains(ErrorList.WrongPassword)) {
-                            Password.setError("رمز وارد شده درست نمی باشد");
-                            Password.requestFocus();
+                            Password.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    Password.setError("رمز وارد شده درست نمی باشد");
+                                    Password.requestFocus();
+                                }
+                            });
                         } else if (error.contains(ErrorList.EmailExist)) {
-                            Email.setError("این ایمیل وجود دارد");
-                            Email.requestFocus();
+                            Email.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    Email.setError("این ایمیل وجود دارد");
+                                    Email.requestFocus();
+                                }
+                            });
                         } else if (error.contains(ErrorList.UserNameExist)) {
-                            UserName.setError("این نام مستعار وجود دارد");
-                            UserName.requestFocus();
+                            UserName.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    UserName.setError("این نام مستعار وجود دارد");
+                                    UserName.requestFocus();
+                                }
+                            });
                         } else if (error.contains(ErrorList.InvalidInput))
                             Toast.makeText(getContext(), "خطایی رخ داد،ورودی های خود را بررسی کنید", Toast.LENGTH_LONG).show();
 
@@ -249,9 +288,20 @@ public class LoginDialog extends Dialog {
                             }
                         } catch (JSONException e) {
 
-                            login.setAlpha(1f);
-                            login.setEnabled(true);
-                            scrollView.fullScroll(ScrollView.FOCUS_UP);
+                            login.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    login.setAlpha(1f);
+                                    login.setEnabled(true);
+                                }
+                            });
+
+                            scrollView.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    scrollView.fullScroll(ScrollView.FOCUS_UP);
+                                }
+                            });
 
                             e.printStackTrace();
                         }
@@ -260,22 +310,47 @@ public class LoginDialog extends Dialog {
                     @Override
                     public void onError (String error) {
 
-                        login.setAlpha(1f);
-                        login.setEnabled(true);
+                        login.post(new Runnable() {
+                            @Override
+                            public void run () {
+                                login.setAlpha(1f);
+                                login.setEnabled(true);
+                            }
+                        });
 
-                        scrollView.fullScroll(ScrollView.FOCUS_UP);
+                        scrollView.post(new Runnable() {
+                            @Override
+                            public void run () {
+                                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                            }
+                        });
+
+
+                        if (UnityGameServiceNative.IsLogEnable)
+                            Log.e(TAG, error);
 
                         CanDissmised = true;
+
                         if (UnityGameServiceNative.IsLogEnable)
                             Log.e(getClass().getName(), error);
 
 
                         if (error.contains(ErrorList.WrongPassword)) {
-                            Password.setError("رمز وارد شده درست نمی باشد");
-                            Password.requestFocus();
+                            Password.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    Password.setError("رمز وارد شده درست نمی باشد");
+                                    Password.requestFocus();
+                                }
+                            });
                         } else if (error.contains(ErrorList.EmailNotFound)) {
-                            Email.setError("این ایمیل وجود ندارد");
-                            Email.requestFocus();
+                            Email.post(new Runnable() {
+                                @Override
+                                public void run () {
+                                    Email.setError("این ایمیل وجود ندارد");
+                                    Email.requestFocus();
+                                }
+                            });
                         } else if (error.contains(ErrorList.InvalidInput))
                             Toast.makeText(getContext(), "خطایی رخ داد،ورودی های خود را بررسی کنید", Toast.LENGTH_LONG).show();
 

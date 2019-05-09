@@ -54,6 +54,7 @@ public final class ApiRequestUtil {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
+                        listener.onError("Exception : " + ignored.toString());
                     }
                 }
             }

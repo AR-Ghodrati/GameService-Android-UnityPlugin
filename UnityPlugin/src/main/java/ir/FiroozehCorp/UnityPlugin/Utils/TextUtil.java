@@ -20,8 +20,7 @@ public final class TextUtil {
      * │
      * username is 5-20 characters long
      */
-    private static final String USERNAME_PATTERN_EN = "^(?=.{3,50}$)^(?!.*__.*)(?!.*\\.\\..*)[a-zA-Z0-9_ ]+\\$";
-    private static final String USERNAME_PATTERN_FA = "^(?=.{3,50}\\$)^(?!.*__.*)(?!.*\\.\\..*)[ا-یآ-ی۰-۹_ ]+(?<![_.])\\$";
+    private static final String USERNAME_PATTERN = "^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{3,50}$";
     /**
      * ^                 # start-of-string
      * (?=.*[0-9])       # a digit must occur at least once
@@ -39,8 +38,7 @@ public final class TextUtil {
     }
 
     public static boolean IsUserNameValid (String userName) {
-        return Pattern.compile(USERNAME_PATTERN_EN).matcher(userName).matches()
-                || Pattern.compile(USERNAME_PATTERN_FA).matcher(userName).matches();
+        return Pattern.compile(USERNAME_PATTERN).matcher(userName).matches();
     }
 
     public static boolean IsPassWordValid (String passWord) {
