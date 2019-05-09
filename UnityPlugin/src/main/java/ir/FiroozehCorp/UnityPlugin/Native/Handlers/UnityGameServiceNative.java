@@ -56,7 +56,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
     public void SetUnityContext (Activity activity) {
         this.context = activity.getApplicationContext();
-        this.UnityActivity = activity;
+        UnityActivity = activity;
     }
 
     public void InitGameService (

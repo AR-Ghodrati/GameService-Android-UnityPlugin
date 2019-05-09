@@ -18,6 +18,7 @@ import ir.FiroozehCorp.UnityPlugin.App.Interfaces.UpdateUtilListener;
 import ir.FiroozehCorp.UnityPlugin.Interfaces.IGameServiceCallback;
 import ir.FiroozehCorp.UnityPlugin.Utils.ConnectivityUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.DialogUtil;
+import ir.FiroozehCorp.UnityPlugin.Utils.NativeUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.UpdateUtil;
 
 /**
@@ -85,7 +86,7 @@ public final class UnityLoginService implements InstallDialogListener, UpdateDia
                     }
                 } else callback.OnError("NetworkUnreachable");
             } else {
-                if (CheckAppStatus)
+                if (CheckAppStatus && !NativeUtil.IsUserLogin(activity))
                     DialogUtil.ShowInstallAppDialog(activity, this);
                 else
                     callback.OnError("GameServiceNotInstalled");
