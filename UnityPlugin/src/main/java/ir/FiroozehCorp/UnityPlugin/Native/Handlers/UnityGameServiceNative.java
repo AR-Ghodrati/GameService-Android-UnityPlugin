@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.VolleyLog;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -47,6 +48,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
     public static UnityGameServiceNative GetInstance () {
         if (Instance == null) {
+            VolleyLog.DEBUG = false; // Disable Volley Log
             Instance = new UnityGameServiceNative();
         }
         return Instance;

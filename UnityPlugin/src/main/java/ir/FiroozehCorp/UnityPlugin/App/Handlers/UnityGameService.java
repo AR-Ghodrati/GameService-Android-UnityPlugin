@@ -115,7 +115,7 @@ public final class UnityGameService implements InstallDialogListener {
         }
     }
 
-    public void GetAchievement (final IGameServiceCallback callback) {
+    public void GetAchievements (final IGameServiceCallback callback) {
 
         try {
             if (gameServiceInterface == null) {
@@ -214,7 +214,7 @@ public final class UnityGameService implements InstallDialogListener {
         }
     }
 
-    public void GetLeaderBoardData (String LeaderBoardID, final IGameServiceCallback callback) {
+    public void GetLeaderBoardDetails (String LeaderBoardID, final IGameServiceCallback callback) {
         try {
             if (gameServiceInterface == null) {
                 if (isLogEnable)
@@ -479,7 +479,7 @@ public final class UnityGameService implements InstallDialogListener {
         }
     }
 
-    public void SaveData (String Name, String Description, String Cover, String SaveData, final IGameServiceCallback callback) {
+    public void SaveGame (String Name, String Description, String Cover, String SaveData, final IGameServiceCallback callback) {
 
         try {
             if (gameServiceInterface == null) {
