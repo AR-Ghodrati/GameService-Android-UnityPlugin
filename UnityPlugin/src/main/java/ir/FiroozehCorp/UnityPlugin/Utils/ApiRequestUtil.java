@@ -51,8 +51,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "loginUserError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -94,11 +92,9 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "registerUserError->" + object.toString());
                         listener.onError(object.getString("msg"));
-                    } catch (Exception ignored) {
-                        listener.onError("Exception : " + ignored.toString());
+                    } catch (Exception e) {
+                        listener.onError("Exception : " + e.toString());
                     }
                 } else listener.onError("ServerError");
             }
@@ -140,8 +136,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "UpdatePlayTokenAsyncError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception e) {
                         listener.onError("Exception : " + e.toString());
@@ -216,8 +210,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "removeUserSaveFileError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -261,8 +253,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "GetAchievementError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -305,8 +295,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "EarnAchievementError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -344,8 +332,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "SubmitScoreError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -396,8 +382,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "SaveGameDataError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -436,8 +420,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "GetGameDataError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -477,8 +459,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "GetLeaderBoardsError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
@@ -518,8 +498,6 @@ public final class ApiRequestUtil {
                 if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
                     try {
                         JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
-                        if (UnityGameServiceNative.IsLogEnable)
-                            Log.d(TAG, "GetLeaderBoardDataError->" + object.toString());
                         listener.onError(object.getString("msg"));
                     } catch (Exception ignored) {
                     }
