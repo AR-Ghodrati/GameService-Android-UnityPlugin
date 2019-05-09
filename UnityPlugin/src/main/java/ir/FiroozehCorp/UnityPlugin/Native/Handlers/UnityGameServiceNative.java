@@ -91,7 +91,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
             ApiRequestUtil.UpdatePlayTokenAsync(UnityActivity
                     , clientId, clientSecret,
-                    DeviceInformationUtil.GetSystemInfo(UnityActivity)
+                    DeviceInformationUtil.GetSystemInfo(UnityActivity, true)
                     , new JsonObjectCallbackListener() {
                         @Override
                         public void onResponse (JSONObject object) {

@@ -27,6 +27,19 @@ public class SysInfo implements Serializable {
     private int ScreenHeight;
     private String SDCardState;
     private int GameOrientation = Configuration.ORIENTATION_LANDSCAPE;
+    private String Form;
+
+    public int getGameOrientation () {
+        return GameOrientation;
+    }
+
+    public String getForm () {
+        return Form;
+    }
+
+    public void setForm (String form) {
+        Form = form;
+    }
 
     public void setGameOrientation (int gameOrientation) {
         GameOrientation = gameOrientation;

@@ -676,7 +676,7 @@ public final class UnityGameService implements InstallDialogListener {
                         InitCallback.OnError(Error);
                     }
                 };
-                gameServiceInterface.InitService(clientId, clientSecret, DeviceInformationUtil.GetSystemInfo(UnityActivity).ToJSON(), iAsyncGameServiceCallback);
+                gameServiceInterface.InitService(clientId, clientSecret, DeviceInformationUtil.GetSystemInfo(UnityActivity, false).ToJSON(), iAsyncGameServiceCallback);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
