@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,15 +102,17 @@ public class LoginDialog extends Dialog {
         });
 
 
-        int width;
-        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+        int width, height;
+        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            height = (int) (getContext().getResources().getDisplayMetrics().heightPixels * 0.7);
             width = (int) (getContext().getResources().getDisplayMetrics().widthPixels * 0.9);
-        else
+        } else {
+            height = getContext().getResources().getDisplayMetrics().heightPixels;
             width = (int) (getContext().getResources().getDisplayMetrics().widthPixels * 0.6);
-
+        }
         Window window = getWindow();
         if (window != null) {
-            window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+            window.setLayout(width, height);
         }
 
 

@@ -408,7 +408,7 @@ public final class ApiRequestUtil {
             , final JsonObjectCallbackListener listener) {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET
-                , URLs.SetSavegame, null, new Response.Listener<JSONObject>() {
+                , URLs.GetSavegame, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse (JSONObject jsonObject) {
                 listener.onResponse(jsonObject);

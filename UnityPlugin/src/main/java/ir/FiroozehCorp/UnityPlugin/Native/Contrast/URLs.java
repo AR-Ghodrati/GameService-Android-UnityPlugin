@@ -11,6 +11,8 @@ public final class URLs {
 
     public static final String DeleteLastSave = BaseURL + "/Api/v1/savegame/delete";
     public static final String SetSavegame = BaseURL + "/Api/v1/savegame/save";
+    public static final String GetSavegame = BaseURL + "/Api/v1/savegame";
+
 
 
     public static final String GetAchievements = BaseURL + "/Api/v1/Achievement";
