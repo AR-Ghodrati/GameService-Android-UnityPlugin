@@ -6,17 +6,20 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ir.FiroozehCorp.UnityPlugin.Interfaces.IGameServiceCallback;
 import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.LoginDialog;
-import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.IGameServiceCallback;
+import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonArrayCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonObjectCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.LoginListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Models.Game;
 import ir.FiroozehCorp.UnityPlugin.Utils.ApiRequestUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.ConnectivityUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.DeviceInformationUtil;
+import ir.FiroozehCorp.UnityPlugin.Utils.FileUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.NativeUtil;
 
 
@@ -127,6 +130,362 @@ public final class UnityGameServiceNative implements LoginListener {
         dialog.setListener(this);
         dialog.show();
     }
+
+
+    public void GetAchievements (final IGameServiceCallback callback) {
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+
+            ApiRequestUtil.GetAchievement(UnityActivity, new JsonArrayCallbackListener() {
+                @Override
+                public void onResponse (JSONArray array) {
+                    if (IsLogEnable)
+                        Log.d(TAG, "GetAchievements : " + array.toString());
+
+                    callback.OnCallback(array.toString());
+                }
+
+                @Override
+                public void onError (String error) {
+                    if (IsLogEnable)
+                        Log.e(TAG, "GetAchievementsError : " + error);
+
+                    callback.OnError(error);
+                }
+            });
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
+    //boolean Notification not Used
+    public void UnlockAchievement (String ID, boolean Notification, final IGameServiceCallback callback) {
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+            if (ID != null && !ID.isEmpty()) {
+                ApiRequestUtil.EarnAchievement(UnityActivity, ID, new JsonObjectCallbackListener() {
+                    @Override
+                    public void onResponse (JSONObject object) {
+                        if (IsLogEnable)
+                            Log.d(TAG, "UnlockAchievement : " + object.toString());
+
+                        try {
+                            if (object.getBoolean("status")) {
+                                JSONObject Obj = object.getJSONObject("new");
+                                callback.OnCallback(Obj.toString());
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError (String error) {
+                        if (IsLogEnable)
+                            Log.e(TAG, "UnlockAchievementError : " + error);
+
+                        callback.OnError(error);
+                    }
+                });
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "InvalidInputs");
+
+                callback.OnError("InvalidInputs");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
+    public void GetLeaderBoards (final IGameServiceCallback callback) {
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+
+            ApiRequestUtil.GetLeaderBoards(UnityActivity, new JsonObjectCallbackListener() {
+                @Override
+                public void onResponse (JSONObject object) {
+                    try {
+                        String array = object.getJSONArray("leaderboard").toString();
+                        if (IsLogEnable)
+                            Log.d(TAG, "GetLeaderBoards : " + array);
+
+                        callback.OnCallback(array);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError (String error) {
+                    if (IsLogEnable)
+                        Log.e(TAG, "GetLeaderBoardsError : " + error);
+
+                    callback.OnError(error);
+                }
+            });
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
+    public void GetLeaderBoardDetails (String ID, final IGameServiceCallback callback) {
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+            if (ID != null && !ID.isEmpty()) {
+                ApiRequestUtil.GetLeaderBoardData(UnityActivity, ID, new JsonObjectCallbackListener() {
+                    @Override
+                    public void onResponse (JSONObject object) {
+                        if (IsLogEnable)
+                            Log.d(TAG, "GetLeaderBoardDetails : " + object.toString());
+
+                        callback.OnCallback(object.toString());
+                    }
+
+                    @Override
+                    public void onError (String error) {
+                        if (IsLogEnable)
+                            Log.e(TAG, "GetLeaderBoardDetailsError : " + error);
+
+                        callback.OnError(error);
+                    }
+                });
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "InvalidInputs");
+
+                callback.OnError("InvalidInputs");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
+    public void SubmitScore (String ID, int Score, boolean Notification, final IGameServiceCallback callback) {
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+            if (Score > 0) {
+                if (ID != null && !ID.isEmpty()) {
+                    ApiRequestUtil.SubmitScore(UnityActivity, ID, Score, new JsonObjectCallbackListener() {
+                        @Override
+                        public void onResponse (JSONObject object) {
+                            try {
+                                if (object.getBoolean("status")) {
+
+                                    JSONObject Obj = object.getJSONObject("leaderboard");
+
+                                    if (IsLogEnable)
+                                        Log.d(TAG, "SubmitScore : " + Obj.toString());
+
+                                    callback.OnCallback(Obj.toString());
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError (String error) {
+                            if (IsLogEnable)
+                                Log.e(TAG, "SubmitScoreError : " + error);
+
+                            callback.OnError(error);
+                        }
+                    });
+                } else {
+                    if (IsLogEnable)
+                        Log.e(TAG, "InvalidInputs");
+
+                    callback.OnError("InvalidInputs");
+                }
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "InvalidScore");
+
+                callback.OnError("InvalidScore");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
+    public void SaveGame (
+            String saveGameName
+            , String saveGameDescription
+            , String saveGameCover
+            , String saveGameData
+            , final IGameServiceCallback callback) {
+
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+
+            if ((saveGameName != null && !saveGameName.isEmpty())
+                    && (saveGameData != null && !saveGameData.isEmpty())) {
+
+                if (FileUtil.IsSaveFileSizeValid(saveGameData)) {
+                    if (saveGameCover == null || FileUtil.IsSaveImgFileSizeValid(saveGameCover)) {
+
+                        ApiRequestUtil.SaveGameData(
+                                UnityActivity, saveGameName, saveGameDescription, saveGameCover, saveGameData
+                                , new JsonObjectCallbackListener() {
+                                    @Override
+                                    public void onResponse (JSONObject object) {
+                                        try {
+                                            if (object.getBoolean("status")) {
+
+                                                JSONObject Obj = object.getJSONObject("new");
+
+                                                if (IsLogEnable)
+                                                    Log.d(TAG, "SaveGame : " + Obj.toString());
+
+                                                callback.OnCallback(Obj.toString());
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError (String error) {
+                                        if (IsLogEnable)
+                                            Log.e(TAG, "SaveGameError : " + error);
+
+                                        callback.OnError(error);
+                                    }
+                                });
+                    } else {
+                        if (IsLogEnable)
+                            Log.e(TAG, "InvalidSaveImgFileSize");
+
+                        callback.OnError("InvalidSaveImgFileSize");
+                    }
+                } else {
+                    if (IsLogEnable)
+                        Log.e(TAG, "InvalidSaveFileSize");
+
+                    callback.OnError("InvalidSaveFileSize");
+                }
+
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "InvalidInputs");
+
+                callback.OnError("InvalidInputs");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
+
+    public void GetLastSave (final IGameServiceCallback callback) {
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+
+            ApiRequestUtil.GetGameData(UnityActivity, new JsonObjectCallbackListener() {
+                @Override
+                public void onResponse (JSONObject object) {
+                    if (IsLogEnable)
+                        Log.d(TAG, "GetLastSave : " + object.toString());
+
+                    callback.OnCallback(object.toString());
+                }
+
+                @Override
+                public void onError (String error) {
+                    if (IsLogEnable)
+                        Log.e(TAG, "GetLastSaveError : " + error);
+
+                    callback.OnError(error);
+                }
+            });
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
+    public void RemoveLastSave (final IGameServiceCallback callback) {
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+            ApiRequestUtil.removeUserSaveFile(UnityActivity, new JsonObjectCallbackListener() {
+                @Override
+                public void onResponse (JSONObject object) {
+
+                    try {
+                        if (object.getBoolean("status")) {
+
+                            if (IsLogEnable)
+                                Log.d(TAG, "RemoveLastSave : Done");
+
+                            callback.OnCallback("Done");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError (String error) {
+                    if (IsLogEnable)
+                        Log.e(TAG, "RemoveLastSaveError : " + error);
+
+                    callback.OnError(error);
+                }
+            });
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
+    public void GetUserData (final IGameServiceCallback callback) {
+        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+
+            ApiRequestUtil.getUserData(UnityActivity, new JsonObjectCallbackListener() {
+                @Override
+                public void onResponse (JSONObject object) {
+                    try {
+                        if (IsLogEnable)
+                            Log.d(TAG, "GetUserData : " + object.getString("data"));
+
+                        callback.OnCallback(object.getString("data"));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError (String error) {
+                    if (IsLogEnable)
+                        Log.e(TAG, "GetUserDataError : " + error);
+
+                    callback.OnError(error);
+                }
+            });
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "NetworkUnreachable");
+
+            callback.OnError("NetworkUnreachable");
+        }
+    }
+
 
 
     @Override
