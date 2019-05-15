@@ -1,6 +1,7 @@
 package ir.FiroozehCorp.UnityPlugin.Native.Handlers;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -12,7 +13,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ir.FiroozehCorp.UnityPlugin.Interfaces.IGameServiceCallback;
+import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.DowloadOBBDialog;
 import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.LoginDialog;
+import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.DownloadListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonArrayCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonObjectCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.LoginListener;
@@ -28,7 +31,9 @@ public final class UnityGameServiceNative implements LoginListener {
 
     private static final String TAG = "UnityGameServiceNative";
     private static UnityGameServiceNative Instance;
+    public static DownloadManager downloadManager;
     public static boolean IsLogEnable = false;
+
     public static Long StartTime;
     private String clientId, clientSecret;
     private IGameServiceCallback InitCallback;
@@ -71,15 +76,16 @@ public final class UnityGameServiceNative implements LoginListener {
             this.clientSecret = clientSecret;
             this.InitCallback = callback;
             IsLogEnable = isLogEnable;
+            downloadManager = (DownloadManager) UnityActivity.getSystemService(Context.DOWNLOAD_SERVICE);
+
+
+            Log.e(TAG, "IsLogEnable : " + isLogEnable);
 
             if (NativeUtil.IsUserLogin(UnityActivity))
                 initGameService();
             else loginUser();
 
         } else {
-            if (IsLogEnable)
-                Log.e(TAG, "InvalidInputs");
-
             callback.OnError("InvalidInputs");
         }
 
@@ -166,8 +172,7 @@ public final class UnityGameServiceNative implements LoginListener {
         }
     }
 
-    //boolean Notification not Used
-    public void UnlockAchievement (String ID, boolean Notification, final IGameServiceCallback callback) {
+    public void UnlockAchievement (String ID, final boolean Notification, final IGameServiceCallback callback) {
         if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
             if (ID != null && !ID.isEmpty()) {
                 ApiRequestUtil.EarnAchievement(UnityActivity, ID, new JsonObjectCallbackListener() {
@@ -179,6 +184,11 @@ public final class UnityGameServiceNative implements LoginListener {
                         try {
                             if (object.getBoolean("status")) {
                                 JSONObject Obj = object.getJSONObject("new");
+
+                                if (Notification) {
+                                    // Achievement achievement = new Gson().fromJson(Obj.toString(), Achievement.class);
+                                }
+
                                 callback.OnCallback(Obj.toString());
                             }
                         } catch (JSONException e) {
@@ -275,7 +285,7 @@ public final class UnityGameServiceNative implements LoginListener {
         }
     }
 
-    public void SubmitScore (String ID, int Score, boolean Notification, final IGameServiceCallback callback) {
+    public void SubmitScore (String ID, final int Score, final boolean Notification, final IGameServiceCallback callback) {
         if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
             if (Score > 0) {
                 if (ID != null && !ID.isEmpty()) {
@@ -289,6 +299,10 @@ public final class UnityGameServiceNative implements LoginListener {
 
                                     if (IsLogEnable)
                                         Log.d(TAG, "SubmitScore : " + Obj.toString());
+
+                                    if (Notification) {
+                                        //LeaderBoard leaderBoard =new Gson().fromJson(Obj.toString(), LeaderBoard.class);
+                                    }
 
                                     callback.OnCallback(Obj.toString());
                                 }
@@ -491,6 +505,28 @@ public final class UnityGameServiceNative implements LoginListener {
             callback.OnError("NetworkUnreachable");
         }
     }
+
+    public void DownloadObbDataFile (String ObbDataTAG, final IGameServiceCallback callback) {
+        if (ObbDataTAG != null && !ObbDataTAG.isEmpty()) {
+            if (FileUtil.IsNeedToDownloadData(UnityActivity)) {
+                DowloadOBBDialog dowloadOBBDialog = new DowloadOBBDialog(UnityActivity);
+                dowloadOBBDialog.setData(ObbDataTAG, new DownloadListener() {
+                    @Override
+                    public void onDone () {
+                        callback.OnCallback("Data_Download_Finished");
+                    }
+
+                    @Override
+                    public void onError (String error) {
+                        callback.OnError(error);
+                    }
+                });
+                dowloadOBBDialog.show();
+            } else callback.OnCallback("Data_Downloaded");
+        } else callback.OnError("InvalidInput");
+
+    }
+
 
 
 

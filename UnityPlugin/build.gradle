@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+//apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -23,11 +25,16 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation fileTree(dir: 'src/main/lib', include: ['*.aar', '*.jar'], exclude: [])
+    //implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
 repositories {
+    flatDir {
+        dirs 'libs'
+    }
     mavenCentral()
 }
 

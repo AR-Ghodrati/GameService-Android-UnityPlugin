@@ -3,7 +3,11 @@ package ir.FiroozehCorp.UnityPlugin.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
 import javax.crypto.SecretKey;
+
+import ir.FiroozehCorp.UnityPlugin.Native.Models.OBB;
 
 public final class NativeUtil {
 
@@ -67,6 +71,26 @@ public final class NativeUtil {
                 }
             }
         }
+        return null;
+    }
+
+    public static void setOBBMetaData (Context context, String tag, Long Size) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE).edit();
+
+        OBB obb = new OBB();
+        obb.setName(tag);
+        obb.setSize(Size);
+
+        editor.putString("OBBMetaData", new Gson().toJson(obb));
+        editor.apply();
+    }
+
+    public static OBB GetOBBMetaData (Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PrefName, Context.MODE_PRIVATE);
+        String meta = sharedPreferences.getString("OBBMetaData", null);
+
+        if (meta != null)
+            return new Gson().fromJson(meta, OBB.class);
         return null;
     }
 

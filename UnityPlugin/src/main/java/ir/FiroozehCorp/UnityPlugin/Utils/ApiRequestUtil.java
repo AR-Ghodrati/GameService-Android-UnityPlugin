@@ -281,7 +281,7 @@ public final class ApiRequestUtil {
             , final JsonObjectCallbackListener listener) {
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("token", NativeUtil.GetJWT(activity));
+        params.put("token", PT);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST
                 , URLs.EarnAchievement + ID, new JSONObject(params), new Response.Listener<JSONObject>() {
@@ -519,6 +519,48 @@ public final class ApiRequestUtil {
 
         Volley.newRequestQueue(activity).add(request);
     }
+
+
+    public static void getDataPackInfo (
+            final Activity activity
+            , final String tag
+            , final JsonObjectCallbackListener listener) {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET
+                , URLs.GetDatapack + tag, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse (JSONObject jsonObject) {
+                listener.onResponse(jsonObject);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse (VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    try {
+                        JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
+                        listener.onError(object.getString("msg"));
+                    } catch (Exception ignored) {
+                    }
+                } else listener.onError("ServerError");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders () {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", PT);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(0
+                , DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setShouldCache(false);
+
+        Volley.newRequestQueue(activity).add(request);
+    }
+
+
 
 
 }
