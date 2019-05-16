@@ -35,6 +35,10 @@ public final class NotificationUtil {
         builder.setAutoCancel(true);
         builder.setOngoing(false);
         builder.setSmallIcon(icon);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            builder.setPriority(Notification.PRIORITY_MAX);
+
         builder.setLargeIcon(BitmapFactory.decodeResource(activity.getResources(),
                 R.drawable.achievement_logo));
         builder.setContentTitle(achievement.getName());
@@ -78,6 +82,10 @@ public final class NotificationUtil {
         builder.setAutoCancel(false);
         builder.setOngoing(false);
         builder.setSmallIcon(icon);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            builder.setPriority(Notification.PRIORITY_MAX);
+
         builder.setLargeIcon(BitmapFactory.decodeResource(activity.getResources(),
                 R.drawable.achievement_logo));
         builder.setContentTitle(leaderBoard.getName());
