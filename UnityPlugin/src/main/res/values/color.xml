@@ -5,8 +5,7 @@
     <color name="BottomColor">#FAFAFA</color>
     <color name="colorPrimary">#FAFAFA</color>
     <color name="colorPrimaryDark">#EEE</color>
-    <color name="colorAccent">#2196F3</color>
-    <color name="chips_color">#98ab87</color>
+    <color name="colorAccent">#00BCD4</color>
     <color name="MainList_Divider">#AFAFAF</color>
     <color name="text_hint">#202020</color>
 </resources>

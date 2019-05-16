@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ir.FiroozehCorp.UnityPlugin.Interfaces.IGameServiceCallback;
-import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.DowloadOBBDialog;
+import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.DownloadOBBDialog;
 import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.LoginDialog;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.DownloadListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonArrayCallbackListener;
@@ -509,8 +509,7 @@ public final class UnityGameServiceNative implements LoginListener {
     public void DownloadObbDataFile (String ObbDataTAG, final IGameServiceCallback callback) {
         if (ObbDataTAG != null && !ObbDataTAG.isEmpty()) {
             if (FileUtil.IsNeedToDownloadData(UnityActivity)) {
-                DowloadOBBDialog dowloadOBBDialog = new DowloadOBBDialog(UnityActivity);
-                dowloadOBBDialog.setData(ObbDataTAG, new DownloadListener() {
+                DownloadOBBDialog.init(UnityActivity, ObbDataTAG, new DownloadListener() {
                     @Override
                     public void onDone () {
                         callback.OnCallback("Data_Download_Finished");
@@ -521,7 +520,6 @@ public final class UnityGameServiceNative implements LoginListener {
                         callback.OnError(error);
                     }
                 });
-                dowloadOBBDialog.show();
             } else callback.OnCallback("Data_Downloaded");
         } else callback.OnError("InvalidInput");
 

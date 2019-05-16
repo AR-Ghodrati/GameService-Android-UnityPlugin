@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
-import android.os.Handler;
+import android.util.Pair;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -63,7 +64,7 @@ public final class FileUtil {
      */
     public static String readableFileSize (long size) {
         if (size <= 0) {
-            return "0";
+            return "درحال محاسبه...";
         }
         final String[] units = new String[]{"بایت", "کیلوبایت", "مگابایت", "گیگابایت", "ترابایت"};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
@@ -82,33 +83,36 @@ public final class FileUtil {
         request.setAllowedOverRoaming(false);
         request.setTitle("گیم سرویس");
         request.setDescription("در حال دانلود دیتای بازی...");
-        request.setVisibleInDownloadsUi(true);
+        request.setVisibleInDownloadsUi(false);
         request.setDestinationUri(Uri.fromFile(GetObbFile(activity, tag)));
 
         final long id = downloadManager.enqueue(request);
+        new GetDownloadInfo().execute(Pair.create(id, listener));
 
+    }
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run () {
-                while (true) {
-                    final DownloadManager.Query query = new DownloadManager.Query();
-                    query.setFilterById(id);
+    private static class GetDownloadInfo
+            extends AsyncTask<Pair<Long, DownloadProgressListener>, Void, Void> {
 
-                    Cursor cursor = downloadManager.query(query);
-                    cursor.moveToFirst();
+        @Override
+        protected Void doInBackground (Pair<Long, DownloadProgressListener>... downloadProgressListeners) {
+            while (true) {
+                final DownloadManager.Query query = new DownloadManager.Query();
+                query.setFilterById(downloadProgressListeners[0].first);
 
-                    int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-                    int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                Cursor cursor = downloadManager.query(query);
+                cursor.moveToFirst();
 
-                    if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
-                        listener.onDone();
-                        break;
-                    }
-                    listener.onProgress(bytes_downloaded, bytes_total);
-                    cursor.close();
+                int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+
+                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                    downloadProgressListeners[0].second.onDone();
+                    break;
                 }
+                downloadProgressListeners[0].second.onProgress(bytes_downloaded);
+                cursor.close();
             }
-        });
+            return null;
+        }
     }
 }
