@@ -9,6 +9,27 @@ public class LeaderBoard {
     @Expose
     private String name;
 
+    @SerializedName ("image")
+    @Expose
+    private String cover;
+
+
+    @Override
+    public String toString () {
+        return "LeaderBoard{" +
+                "name='" + name + '\'' +
+                ", cover='" + cover + '\'' +
+                '}';
+    }
+
+    public String getCover () {
+        return cover;
+    }
+
+    public void setCover (String cover) {
+        this.cover = cover;
+    }
+
     public String getName () {
         return name;
     }

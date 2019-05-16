@@ -24,6 +24,30 @@ public class Achievement implements Serializable {
     @Expose
     private int point;
 
+    @SerializedName ("image")
+    @Expose
+    private String cover;
+
+
+    @Override
+    public String toString () {
+        return "Achievement{" +
+                "name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", description='" + description + '\'' +
+                ", point=" + point +
+                ", cover='" + cover + '\'' +
+                '}';
+    }
+
+    public String getCover () {
+        return cover;
+    }
+
+    public void setCover (String cover) {
+        this.cover = cover;
+    }
+
     public String getName () {
         return name;
     }

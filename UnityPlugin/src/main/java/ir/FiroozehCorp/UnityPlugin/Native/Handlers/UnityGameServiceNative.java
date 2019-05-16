@@ -176,17 +176,17 @@ public final class UnityGameServiceNative implements LoginListener {
                 ApiRequestUtil.EarnAchievement(UnityActivity, ID, new JsonObjectCallbackListener() {
                     @Override
                     public void onResponse (JSONObject object) {
-                        if (IsLogEnable)
-                            Log.d(TAG, "UnlockAchievement : " + object.toString());
-
                         try {
                             if (object.getBoolean("status")) {
-                                JSONObject Obj = object.getJSONObject("new");
 
-                                if (Notification) {
-                                    Achievement achievement = new Gson().fromJson(Obj.toString(), Achievement.class);
+                                JSONObject Obj = object.getJSONObject("new");
+                                Achievement achievement = new Gson().fromJson(Obj.toString(), Achievement.class);
+
+                                if (IsLogEnable)
+                                    Log.d(TAG, "UnlockAchievement : " + achievement.toString());
+
+                                if (Notification)
                                     NotificationUtil.NotifyAchievement(UnityActivity, achievement);
-                                }
 
                                 callback.OnCallback(Obj.toString());
                             }

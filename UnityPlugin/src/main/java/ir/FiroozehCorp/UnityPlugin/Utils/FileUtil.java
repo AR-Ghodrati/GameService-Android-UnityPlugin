@@ -3,15 +3,20 @@ package ir.FiroozehCorp.UnityPlugin.Utils;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Pair;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.DownloadProgressListener;
+import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.ImageLoadListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Models.OBB;
 
 import static ir.FiroozehCorp.UnityPlugin.Native.Handlers.UnityGameServiceNative.downloadManager;
@@ -115,4 +120,24 @@ public final class FileUtil {
             return null;
         }
     }
+
+    public static class LoadImageFromURL
+            extends AsyncTask<Pair<String, ImageLoadListener>, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground (Pair<String, ImageLoadListener>... pairs) {
+            try {
+                URL url = new URL(pairs[0].first);
+                pairs[0].second.onLoaded(BitmapFactory.decodeStream(url.openConnection().getInputStream()));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            pairs[0].second.onLoaded(null);
+            return null;
+        }
+    }
+
 }
