@@ -34,7 +34,7 @@ public final class DownloadOBBDialog {
         downloadDialog.setCanceledOnTouchOutside(false);
         downloadDialog.setIcon(R.drawable.logo);
         downloadDialog.setProgressStyle(STYLE_HORIZONTAL);
-        downloadDialog.setMax(100);
+        downloadDialog.setProgressNumberFormat(null);
 
 
         final AlertDialog.Builder noInternetDialog = new AlertDialog.Builder(activity);
@@ -71,17 +71,17 @@ public final class DownloadOBBDialog {
                                 if (FileUtil.IsFreeSpaceToDownload(size)) {
 
                                     downloadDialog.setIndeterminate(false);
+                                    downloadDialog.setMax((int) size);
 
                                     FileUtil.DownloadDataFile(UnityActivity, link, tag
                                             , new DownloadProgressListener() {
                                                 @Override
                                                 public void onProgress (final int progress) {
 
-                                                    final int current = (int) ((progress * 100) / size);
                                                     UnityActivity.runOnUiThread(new Runnable() {
                                                         @Override
                                                         public void run () {
-                                                            downloadDialog.setProgress(current);
+                                                            downloadDialog.setProgress(progress);
                                                             downloadDialog.setMessage("درحال دانلود دیتای بازی..."
                                                                     + "\n(" + FileUtil.readableFileSize(progress) + " از " + FileUtil.readableFileSize(size) + ")");
                                                         }
@@ -105,6 +105,13 @@ public final class DownloadOBBDialog {
                                             + " فضای خالی نیاز است.");
                                     noSpaceDialog.setIcon(R.drawable.logo);
                                     noSpaceDialog.setCancelable(false);
+                                    noSpaceDialog.setPositiveButton("بستن بازی", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick (DialogInterface dialog, int which) {
+                                            listener.onError("Data_Download_Dismissed");
+                                            dialog.dismiss();
+                                        }
+                                    });
 
                                     downloadDialog.dismiss();
                                     noSpaceDialog.show();

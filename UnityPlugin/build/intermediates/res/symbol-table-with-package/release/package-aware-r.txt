@@ -3,6 +3,7 @@ color BottomColor
 color LoadingColor
 color MainList_Divider
 color black
+color chips_color
 color colorAccent
 color colorPrimary
 color colorPrimaryDark
@@ -13,7 +14,6 @@ drawable bg_mobile
 drawable btn_primary
 drawable btn_white
 drawable curve_background_noti
-drawable download_bg
 drawable ic_star
 drawable leaderboard_logo
 drawable logo

@@ -19,12 +19,15 @@ import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.DownloadListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonArrayCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonObjectCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.LoginListener;
+import ir.FiroozehCorp.UnityPlugin.Native.Models.Achievement;
 import ir.FiroozehCorp.UnityPlugin.Native.Models.Game;
+import ir.FiroozehCorp.UnityPlugin.Native.Models.LeaderBoard;
 import ir.FiroozehCorp.UnityPlugin.Utils.ApiRequestUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.ConnectivityUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.DeviceInformationUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.FileUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.NativeUtil;
+import ir.FiroozehCorp.UnityPlugin.Utils.NotificationUtil;
 
 
 public final class UnityGameServiceNative implements LoginListener {
@@ -39,12 +42,8 @@ public final class UnityGameServiceNative implements LoginListener {
     private IGameServiceCallback InitCallback;
     private Game currentGame;
 
-
     // Play Token
     public static String PT;
-
-
-    private Context context;
     public static Activity UnityActivity;
 
     public UnityGameServiceNative () {
@@ -60,7 +59,6 @@ public final class UnityGameServiceNative implements LoginListener {
     }
 
     public void SetUnityContext (Activity activity) {
-        this.context = activity.getApplicationContext();
         UnityActivity = activity;
     }
 
@@ -186,7 +184,8 @@ public final class UnityGameServiceNative implements LoginListener {
                                 JSONObject Obj = object.getJSONObject("new");
 
                                 if (Notification) {
-                                    // Achievement achievement = new Gson().fromJson(Obj.toString(), Achievement.class);
+                                    Achievement achievement = new Gson().fromJson(Obj.toString(), Achievement.class);
+                                    NotificationUtil.NotifyAchievement(UnityActivity, achievement);
                                 }
 
                                 callback.OnCallback(Obj.toString());
@@ -301,7 +300,8 @@ public final class UnityGameServiceNative implements LoginListener {
                                         Log.d(TAG, "SubmitScore : " + Obj.toString());
 
                                     if (Notification) {
-                                        //LeaderBoard leaderBoard =new Gson().fromJson(Obj.toString(), LeaderBoard.class);
+                                        LeaderBoard leaderBoard = new Gson().fromJson(Obj.toString(), LeaderBoard.class);
+                                        NotificationUtil.NotifySubmitScore(UnityActivity, Score, leaderBoard);
                                     }
 
                                     callback.OnCallback(Obj.toString());
