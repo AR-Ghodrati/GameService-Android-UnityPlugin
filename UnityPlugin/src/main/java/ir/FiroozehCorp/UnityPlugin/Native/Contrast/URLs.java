@@ -3,6 +3,8 @@ package ir.FiroozehCorp.UnityPlugin.Native.Contrast;
 public final class URLs {
 
     private static final String BaseURL = "https://gameservice.liara.run";
+    public static final String BaseURLDOWNLOAD = "https://gameservice.liara.run:3000/game/";
+
 
     public static final String LoginUser = BaseURL + "/Auth/app/login";
     public static final String Start = BaseURL + "/Auth/start";
@@ -20,8 +22,6 @@ public final class URLs {
 
     public static final String SubmitScore = BaseURL + "/Api/v1/Leaderboard/submitscore/";
     public static final String GetLeaderboard = BaseURL + "/Api/v1/Leaderboard/";
-
-    public static final String GetDatapack = BaseURL + "/Api/v1/datapack/?tag=";
 
 
 

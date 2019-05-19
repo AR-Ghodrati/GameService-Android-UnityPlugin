@@ -523,11 +523,12 @@ public final class ApiRequestUtil {
 
     public static void getDataPackInfo (
             final Activity activity
+            , final String GameName
             , final String tag
             , final JsonObjectCallbackListener listener) {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET
-                , URLs.GetDatapack + tag, null, new Response.Listener<JSONObject>() {
+                , URLs.BaseURLDOWNLOAD + GameName + "/datapack/?tag=" + tag, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse (JSONObject jsonObject) {
                 listener.onResponse(jsonObject);

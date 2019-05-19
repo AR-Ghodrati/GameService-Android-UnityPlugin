@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
 
-import ir.FiroozehCorp.UnityPlugin.Native.DownloadHandler;
+import ir.FiroozehCorp.UnityPlugin.Native.Handlers.DownloadHandler;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.DownloadProgressListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.ImageLoadListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Models.OBB;

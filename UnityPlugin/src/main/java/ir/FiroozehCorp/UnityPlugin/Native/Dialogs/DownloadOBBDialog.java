@@ -24,7 +24,7 @@ import static ir.FiroozehCorp.UnityPlugin.Native.Handlers.UnityGameServiceNative
 
 public final class DownloadOBBDialog {
 
-    public static void init (final Activity activity, final String tag, final DownloadListener listener) {
+    public static void init (final Activity activity, final String GameName, final String tag, final DownloadListener listener) {
 
         final ProgressDialog downloadDialog = new ProgressDialog(activity);
         downloadDialog.setTitle("گیم سرویس");
@@ -49,7 +49,7 @@ public final class DownloadOBBDialog {
         noInternetDialog.setNegativeButton("دانلود دیتا", new DialogInterface.OnClickListener() {
             @Override
             public void onClick (DialogInterface dialog, int which) {
-                init(activity, tag, listener);
+                init(activity, GameName, tag, listener);
             }
         });
         noInternetDialog.setIcon(R.drawable.logo);
@@ -60,7 +60,7 @@ public final class DownloadOBBDialog {
         if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
             downloadDialog.show();
 
-            ApiRequestUtil.getDataPackInfo(UnityActivity, tag
+            ApiRequestUtil.getDataPackInfo(UnityActivity, GameName, tag
                     , new JsonObjectCallbackListener() {
                         @Override
                         public void onResponse (JSONObject object) {

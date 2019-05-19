@@ -1,4 +1,4 @@
-package ir.FiroozehCorp.UnityPlugin.Native;
+package ir.FiroozehCorp.UnityPlugin.Native.Handlers;
 
 import android.app.Activity;
 import android.app.DownloadManager;
@@ -30,10 +30,10 @@ public class DownloadHandler {
         downloadManager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
     }
 
-    public void DownloadObbDataFile (String ObbDataTAG, final IGameServiceCallback callback) {
+    public void DownloadObbDataFile (String GameName, String ObbDataTAG, final IGameServiceCallback callback) {
         if (ObbDataTAG != null && !ObbDataTAG.isEmpty()) {
             if (FileUtil.IsNeedToDownloadData(UnityActivity)) {
-                DownloadOBBDialog.init(UnityActivity, ObbDataTAG, new DownloadListener() {
+                DownloadOBBDialog.init(UnityActivity, GameName, ObbDataTAG, new DownloadListener() {
                     @Override
                     public void onDone () {
                         callback.OnCallback("Data_Download_Finished");
