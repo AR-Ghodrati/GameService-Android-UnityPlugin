@@ -1,8 +1,6 @@
 package ir.FiroozehCorp.UnityPlugin.Native.Handlers;
 
 import android.app.Activity;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.VolleyLog;
@@ -13,9 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ir.FiroozehCorp.UnityPlugin.Interfaces.IGameServiceCallback;
-import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.DownloadOBBDialog;
 import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.LoginDialog;
-import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.DownloadListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonArrayCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.JsonObjectCallbackListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.LoginListener;
@@ -34,7 +30,6 @@ public final class UnityGameServiceNative implements LoginListener {
 
     private static final String TAG = "UnityGameServiceNative";
     private static UnityGameServiceNative Instance;
-    public static DownloadManager downloadManager;
     public static boolean IsLogEnable = false;
 
     public static Long StartTime;
@@ -74,7 +69,6 @@ public final class UnityGameServiceNative implements LoginListener {
             this.clientSecret = clientSecret;
             this.InitCallback = callback;
             IsLogEnable = isLogEnable;
-            downloadManager = (DownloadManager) UnityActivity.getSystemService(Context.DOWNLOAD_SERVICE);
 
 
             Log.e(TAG, "IsLogEnable : " + isLogEnable);
@@ -505,26 +499,6 @@ public final class UnityGameServiceNative implements LoginListener {
             callback.OnError("NetworkUnreachable");
         }
     }
-
-    public void DownloadObbDataFile (String ObbDataTAG, final IGameServiceCallback callback) {
-        if (ObbDataTAG != null && !ObbDataTAG.isEmpty()) {
-            if (FileUtil.IsNeedToDownloadData(UnityActivity)) {
-                DownloadOBBDialog.init(UnityActivity, ObbDataTAG, new DownloadListener() {
-                    @Override
-                    public void onDone () {
-                        callback.OnCallback("Data_Download_Finished");
-                    }
-
-                    @Override
-                    public void onError (String error) {
-                        callback.OnError(error);
-                    }
-                });
-            } else callback.OnCallback("Data_Downloaded");
-        } else callback.OnError("InvalidInput");
-
-    }
-
 
 
 

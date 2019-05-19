@@ -15,11 +15,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
 
+import ir.FiroozehCorp.UnityPlugin.Native.DownloadHandler;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.DownloadProgressListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.ImageLoadListener;
 import ir.FiroozehCorp.UnityPlugin.Native.Models.OBB;
 
-import static ir.FiroozehCorp.UnityPlugin.Native.Handlers.UnityGameServiceNative.downloadManager;
 
 public final class FileUtil {
 
@@ -91,7 +91,8 @@ public final class FileUtil {
         request.setVisibleInDownloadsUi(false);
         request.setDestinationUri(Uri.fromFile(GetObbFile(activity, tag)));
 
-        final long id = downloadManager.enqueue(request);
+        final long id = DownloadHandler.downloadManager.enqueue(request);
+        DownloadHandler.DownloadTag = id;
         new GetDownloadInfo().execute(Pair.create(id, listener));
 
     }
@@ -105,7 +106,7 @@ public final class FileUtil {
                 final DownloadManager.Query query = new DownloadManager.Query();
                 query.setFilterById(downloadProgressListeners[0].first);
 
-                Cursor cursor = downloadManager.query(query);
+                Cursor cursor = DownloadHandler.downloadManager.query(query);
                 cursor.moveToFirst();
 
                 int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
