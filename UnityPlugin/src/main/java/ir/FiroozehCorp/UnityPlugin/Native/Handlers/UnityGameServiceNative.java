@@ -132,6 +132,7 @@ public final class UnityGameServiceNative implements LoginListener {
     private void loginUser () {
         Log.d(TAG, "UserNotLogin , Login UserCalled");
 
+        UnityActivity.getWindow().closeAllPanels();
         LoginDialog dialog = new LoginDialog(UnityActivity);
         dialog.setListener(this);
         dialog.show();

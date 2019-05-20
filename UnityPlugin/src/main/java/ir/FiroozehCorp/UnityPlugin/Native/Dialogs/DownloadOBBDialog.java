@@ -28,6 +28,8 @@ public final class DownloadOBBDialog {
 
     private static final int ON_RESPONSE = 1;
     private static final int ON_PROGRESS = 2;
+    private static final int ON_DONE = 3;
+
 
 
     public static void init (final Activity activity, final String GameName, final String tag, final DownloadListener listener) {
@@ -74,6 +76,10 @@ public final class DownloadOBBDialog {
                             Pair<Integer, String> data = (Pair<Integer, String>) msg.obj;
                             downloadDialog.setProgress(data.first);
                             downloadDialog.setMessage(data.second);
+                        } else if (msg.what == ON_DONE) {
+                            downloadDialog.dismiss();
+                            noInternet.dismiss();
+                            listener.onDone();
                         }
                         return true;
                     }
@@ -109,9 +115,7 @@ public final class DownloadOBBDialog {
                                                 @Override
                                                 public void onDone () {
                                                     NativeUtil.setOBBMetaData(activity, tag, size);
-                                                    downloadDialog.dismiss();
-                                                    noInternet.dismiss();
-                                                    listener.onDone();
+                                                    handler.obtainMessage(ON_DONE).sendToTarget();
                                                 }
                                             });
 
@@ -143,7 +147,7 @@ public final class DownloadOBBDialog {
 
                         @Override
                         public void onError (String error) {
-
+                            listener.onError(error);
                         }
                     });
 
