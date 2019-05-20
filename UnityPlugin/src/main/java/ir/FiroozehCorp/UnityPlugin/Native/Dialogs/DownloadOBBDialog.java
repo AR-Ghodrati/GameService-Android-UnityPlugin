@@ -5,7 +5,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
+import android.util.Pair;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,9 +23,12 @@ import ir.FiroozehCorp.UnityPlugin.Utils.FileUtil;
 import ir.FiroozehCorp.UnityPlugin.Utils.NativeUtil;
 
 import static android.app.ProgressDialog.STYLE_HORIZONTAL;
-import static ir.FiroozehCorp.UnityPlugin.Native.Handlers.UnityGameServiceNative.UnityActivity;
 
 public final class DownloadOBBDialog {
+
+    private static final int ON_RESPONSE = 1;
+    private static final int ON_PROGRESS = 2;
+
 
     public static void init (final Activity activity, final String GameName, final String tag, final DownloadListener listener) {
 
@@ -57,10 +63,27 @@ public final class DownloadOBBDialog {
         final AlertDialog noInternet = noInternetDialog.create();
 
 
-        if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+        final Handler handler = new Handler(
+                new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage (Message msg) {
+                        if (msg.what == ON_RESPONSE) {
+                            downloadDialog.setIndeterminate(false);
+                            downloadDialog.setMax((int) msg.obj);
+                        } else if (msg.what == ON_PROGRESS) {
+                            Pair<Integer, String> data = (Pair<Integer, String>) msg.obj;
+                            downloadDialog.setProgress(data.first);
+                            downloadDialog.setMessage(data.second);
+                        }
+                        return true;
+                    }
+                });
+
+
+        if (ConnectivityUtil.isNetworkConnected(activity)) {
             downloadDialog.show();
 
-            ApiRequestUtil.getDataPackInfo(UnityActivity, GameName, tag
+            ApiRequestUtil.getDataPackInfo(activity, GameName, tag
                     , new JsonObjectCallbackListener() {
                         @Override
                         public void onResponse (JSONObject object) {
@@ -70,27 +93,22 @@ public final class DownloadOBBDialog {
 
                                 if (FileUtil.IsFreeSpaceToDownload(size)) {
 
-                                    downloadDialog.setIndeterminate(false);
-                                    downloadDialog.setMax((int) size);
+                                    handler.obtainMessage(ON_RESPONSE, (int) size)
+                                            .sendToTarget();
 
-                                    FileUtil.DownloadDataFile(UnityActivity, link, tag
+
+                                    FileUtil.DownloadDataFile(activity, link, tag
                                             , new DownloadProgressListener() {
                                                 @Override
                                                 public void onProgress (final int progress) {
-
-                                                    UnityActivity.runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run () {
-                                                            downloadDialog.setProgress(progress);
-                                                            downloadDialog.setMessage("درحال دانلود دیتای بازی..."
-                                                                    + "\n(" + FileUtil.readableFileSize(progress) + " از " + FileUtil.readableFileSize(size) + ")");
-                                                        }
-                                                    });
+                                                    String txt = "درحال دانلود دیتای بازی..." + "\n(" + FileUtil.readableFileSize(progress) + " از " + FileUtil.readableFileSize(size) + ")";
+                                                    handler.obtainMessage(ON_PROGRESS, Pair.create(progress, txt))
+                                                            .sendToTarget();
                                                 }
 
                                                 @Override
                                                 public void onDone () {
-                                                    NativeUtil.setOBBMetaData(UnityActivity, tag, size);
+                                                    NativeUtil.setOBBMetaData(activity, tag, size);
                                                     downloadDialog.dismiss();
                                                     noInternet.dismiss();
                                                     listener.onDone();

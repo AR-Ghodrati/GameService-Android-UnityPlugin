@@ -29,8 +29,8 @@ public final class DeviceInformationUtil {
     public static SysInfo GetSystemInfo (Activity a, boolean isNative) {
         SysInfo sysInfo = new SysInfo();
 
-        if (isNative) sysInfo.setForm("unity-native");
-        else sysInfo.setForm("unity-app");
+        if (isNative) sysInfo.setFrom("unity-native");
+        else sysInfo.setFrom("unity-app");
 
         try {
             PackageInfo pInfo = a.getPackageManager().getPackageInfo(

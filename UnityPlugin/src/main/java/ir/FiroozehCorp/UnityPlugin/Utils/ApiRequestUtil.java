@@ -2,6 +2,7 @@ package ir.FiroozehCorp.UnityPlugin.Utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -125,6 +126,8 @@ public final class ApiRequestUtil {
         params.put("game", clientId);
         params.put("secret", clientSecret);
         params.put("system_info", sysInfo.ToJSON());
+
+        Log.e(TAG, new JSONObject(params).toString());
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST
                 , URLs.Start, new JSONObject(params), new Response.Listener<JSONObject>() {
@@ -528,7 +531,7 @@ public final class ApiRequestUtil {
             , final JsonObjectCallbackListener listener) {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET
-                , URLs.BaseURLDOWNLOAD + GameName + "/datapack/?tag=" + tag, null, new Response.Listener<JSONObject>() {
+                , URLs.BaseURL + "/game/" + GameName + "/datapack/?tag=" + tag, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse (JSONObject jsonObject) {
                 listener.onResponse(jsonObject);

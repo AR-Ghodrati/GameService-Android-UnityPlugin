@@ -71,7 +71,7 @@ public final class UnityGameServiceNative implements LoginListener {
             IsLogEnable = isLogEnable;
 
 
-            Log.e(TAG, "IsLogEnable : " + isLogEnable);
+            Log.d(TAG, "IsLogEnable : " + isLogEnable);
 
             if (NativeUtil.IsUserLogin(UnityActivity))
                 initGameService();
@@ -130,6 +130,8 @@ public final class UnityGameServiceNative implements LoginListener {
     }
 
     private void loginUser () {
+        Log.d(TAG, "UserNotLogin , Login UserCalled");
+
         LoginDialog dialog = new LoginDialog(UnityActivity);
         dialog.setListener(this);
         dialog.show();

@@ -9,12 +9,12 @@ import ir.FiroozehCorp.UnityPlugin.Native.Dialogs.DownloadOBBDialog;
 import ir.FiroozehCorp.UnityPlugin.Native.Interfaces.DownloadListener;
 import ir.FiroozehCorp.UnityPlugin.Utils.FileUtil;
 
-public class DownloadHandler {
+public final class DownloadHandler {
 
     public static DownloadManager downloadManager;
     public static Long DownloadTag;
     private static DownloadHandler Instance;
-    private static Activity UnityActivity;
+    public static Activity UnityActivity;
 
     public DownloadHandler () {
         Instance = this;

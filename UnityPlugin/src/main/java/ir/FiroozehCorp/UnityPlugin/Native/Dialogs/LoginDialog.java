@@ -32,7 +32,7 @@ public class LoginDialog extends Dialog {
     private static final String TAG = "LoginDialog";
     private LoginListener listener;
     private boolean IsLoginMod = true;
-    private boolean CanDissmised = true;
+    private boolean CanDismissed = true;
     private boolean CheckData;
 
 
@@ -146,7 +146,7 @@ public class LoginDialog extends Dialog {
         } else {
 
             if (ConnectivityUtil.isNetworkConnected(getContext())) {
-                CanDissmised = false;
+                CanDismissed = false;
 
                 register.setAlpha(.2f);
                 register.setEnabled(false);
@@ -155,7 +155,7 @@ public class LoginDialog extends Dialog {
                 ApiRequestUtil.registerUser(getContext(), username, email, pass, new JsonObjectCallbackListener() {
                     @Override
                     public void onResponse (JSONObject object) {
-                        CanDissmised = true;
+                        CanDismissed = true;
                         try {
                             if (object.getBoolean("status")) {
                                 UnityGameServiceNative.StartTime = System.currentTimeMillis();
@@ -266,7 +266,7 @@ public class LoginDialog extends Dialog {
         } else {
 
             if (ConnectivityUtil.isNetworkConnected(getContext())) {
-                CanDissmised = false;
+                CanDismissed = false;
 
                 login.setAlpha(.2f);
                 login.setEnabled(false);
@@ -274,7 +274,7 @@ public class LoginDialog extends Dialog {
                 ApiRequestUtil.loginUser(getContext(), email, pass, new JsonObjectCallbackListener() {
                     @Override
                     public void onResponse (JSONObject object) {
-                        CanDissmised = true;
+                        CanDismissed = true;
                         try {
                             if (object.getBoolean("status")) {
                                 UnityGameServiceNative.StartTime = System.currentTimeMillis();
@@ -329,7 +329,7 @@ public class LoginDialog extends Dialog {
                         if (UnityGameServiceNative.IsLogEnable)
                             Log.e(TAG, error);
 
-                        CanDissmised = true;
+                        CanDismissed = true;
 
                         if (UnityGameServiceNative.IsLogEnable)
                             Log.e(getClass().getName(), error);
@@ -401,7 +401,7 @@ public class LoginDialog extends Dialog {
             register.setVisibility(View.VISIBLE);
             Description.setText("به حساب کاربری خود وارد شوید یا ثبت نام کنید");
         } else {
-            if (CanDissmised) {
+            if (CanDismissed) {
                 listener.onDismiss();
                 dismiss();
                 super.onBackPressed();
