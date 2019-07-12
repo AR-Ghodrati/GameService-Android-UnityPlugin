@@ -1,4 +1,4 @@
-ir.FiroozehCorp.UnityPlugin
+ir.FiroozehCorp.GameService.UnityPackage
 color BottomColor
 color LoadingColor
 color MainList_Divider

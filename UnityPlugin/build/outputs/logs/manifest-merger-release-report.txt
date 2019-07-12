@@ -1,25 +1,25 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
-INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
-INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
-INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
-INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
-INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
-INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
+ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
+INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
+INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
+INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
+INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
+INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
+INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
 	package
-		ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:11-48
+		ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:11-61
 		INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml
 		INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml
-		ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
+		ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
 		INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
+		ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
 	android:versionCode
 		INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml
-		ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-51
+		ADDED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml:1:1-64
 		INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml
 uses-sdk
 INJECTED from /Users/alirezaghodrati/AndroidStudioProjects/GameService_UnityPlugin/UnityPlugin/src/main/AndroidManifest.xml reason: use-sdk injection requested
