@@ -123,7 +123,7 @@ public final class NotificationUtil {
 
     public static void NotifyWSNotification (Context activity, ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Notification notification, NotificationListener listener) {
         if (notification.HaveJsonData() && listener != null)
-            listener.JsonData(notification.getJsonData());
+            listener.onData(notification.getJsonData());
         if (!notification.IsOnlyJson()) {
             String id = "GameServiceUnity";
             final NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -161,7 +161,7 @@ public final class NotificationUtil {
 
                 case OPEN_APP:
                     Intent notifyIntent = activity.getPackageManager()
-                            .getLaunchIntentForPackage(notification.getTapAction().getPackageName());
+                            .getLaunchIntentForPackage(activity.getPackageName());
                     if (notifyIntent != null) {
                         notifyIntent.setAction(Intent.ACTION_MAIN);
                         notifyIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -215,7 +215,7 @@ public final class NotificationUtil {
                             Intent notificationIntentIranApps;
                             try {
                                 notificationIntentIranApps = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse("iranapps://details?id=" + notification.getTapAction().getPackageName()));
+                                        Uri.parse("iranapps://app/" + notification.getTapAction().getPackageName()));
                             } catch (ActivityNotFoundException e) {
                                 notificationIntentIranApps = new Intent(
                                         Intent.ACTION_VIEW,
@@ -280,22 +280,10 @@ public final class NotificationUtil {
                     break;
             }
 
-            if (notification.getIcon() != null) {
-                ImageLoadListener _listener = new ImageLoadListener() {
-                    @Override
-                    public void onLoaded (Bitmap bitmap) {
-                        if (bitmap != null) builder.setLargeIcon(bitmap);
-                        Notification notification = builder.getNotification();
-                        notificationManager.notify("GameServiceUnity", GSNotificationID, notification);
-                        GSNotificationID++;
-                    }
-                };
-                new FileUtil.LoadImageFromURL().execute(Pair.create(notification.getIcon(), _listener));
-            } else {
                 Notification noti = builder.getNotification();
                 notificationManager.notify("GameServiceUnity", GSNotificationID, noti);
                 GSNotificationID++;
-            }
+
         }
     }
 }

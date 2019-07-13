@@ -52,6 +52,8 @@ public class WSClientUtil extends WebSocketClient {
 
     @Override
     public void onOpen (ServerHandshake serverHandshake) {
+        if (isLogEnable)
+            Log.d(TAG, "Notification Service Is Running...");
     }
 
     @Override

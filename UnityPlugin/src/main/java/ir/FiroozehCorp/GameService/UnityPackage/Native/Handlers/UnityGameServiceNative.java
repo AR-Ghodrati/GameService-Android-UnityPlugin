@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import ir.FiroozehCorp.GameService.UnityPackage.Interfaces.IGameServiceCallback;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Dialogs.LoginDialog;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonArrayCallbackListener;
-import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonDataListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonObjectCallbackListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.LoginListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.NotificationListener;
@@ -47,6 +46,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
     // Notification Service
     private GSNotificationService gsNotificationService;
+    private NotificationListener notificationListener;
 
     // Play Token
     public static String PT;
@@ -73,19 +73,19 @@ public final class UnityGameServiceNative implements LoginListener {
             , String clientSecret
             , boolean isLogEnable
             , IGameServiceCallback callback
-            , JsonDataListener listener) {
+            , NotificationListener listener) {
 
         if (clientId != null && clientSecret != null
                 && !clientId.isEmpty() && !clientSecret.isEmpty()) {
             this.clientId = clientId;
             this.clientSecret = clientSecret;
             this.InitCallback = callback;
+            this.notificationListener = listener;
             IsLogEnable = isLogEnable;
 
 
             Log.d(TAG, "IsLogEnable : " + isLogEnable);
 
-            BindNotificationService(listener);
 
             if (NativeUtil.IsUserLogin(UnityActivity))
                 initGameService();
@@ -114,6 +114,9 @@ public final class UnityGameServiceNative implements LoginListener {
                                     StartTime = System.currentTimeMillis();
                                     PT = object.getString("token");
                                     currentGame = new Gson().fromJson(object.getString("game"), Game.class);
+
+                                    BindNotificationService(notificationListener, currentGame.get_id());
+
 
                                     if (IsLogEnable)
                                         Log.d(TAG, "Success");
@@ -539,16 +542,16 @@ public final class UnityGameServiceNative implements LoginListener {
         InitCallback.OnError("LoginDismissed");
     }
 
-    private void BindNotificationService (final JsonDataListener listener) {
+    private void BindNotificationService (final NotificationListener listener, final String GameID) {
         ServiceConnection gsNotificationConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected (ComponentName name, IBinder service) {
                 GSNotificationService.LocalBinder binder = (GSNotificationService.LocalBinder) service;
                 gsNotificationService = binder.get();
 
-                gsNotificationService.StartWSClient(new NotificationListener() {
+                gsNotificationService.StartWSClient(GameID, new NotificationListener() {
                     @Override
-                    public void JsonData (String JsonData) {
+                    public void onData (String JsonData) {
                         if (listener != null) listener.onData(JsonData);
                         else {
                             if (IsLogEnable)

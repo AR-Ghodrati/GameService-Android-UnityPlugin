@@ -8,6 +8,16 @@ import java.util.List;
 
 public class Game implements Serializable {
 
+    @SerializedName ("id")
+    @Expose
+    private String id;
+
+
+    @SerializedName ("_id")
+    @Expose
+    private String _id;
+
+
     @SerializedName ("name")
     @Expose
     private String name;
@@ -27,10 +37,6 @@ public class Game implements Serializable {
     @SerializedName ("explane")
     @Expose
     private String explane;
-
-    @SerializedName ("id")
-    @Expose
-    private String id;
 
     @SerializedName ("created")
     @Expose
@@ -179,15 +185,24 @@ public class Game implements Serializable {
         this.platforms = platforms;
     }
 
+    public String get_id () {
+        return _id;
+    }
+
+    public void set_id (String _id) {
+        this._id = _id;
+    }
+
     @Override
     public String toString () {
         return "Game{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", _id='" + _id + '\'' +
+                ", name='" + name + '\'' +
                 ", Package='" + Package + '\'' +
                 ", category='" + category + '\'' +
                 ", installed=" + installed +
                 ", explane='" + explane + '\'' +
-                ", id='" + id + '\'' +
                 ", created=" + created +
                 ", link='" + link + '\'' +
                 ", status=" + status +

@@ -22,9 +22,11 @@ public class GSNotificationService extends Service {
     public static int GSNotificationID = 1000;
     private WSClientUtil wsClientUtil;
 
-    public void StartWSClient (NotificationListener listener) {
+    public void StartWSClient (String GameID, NotificationListener listener) {
         try {
-            wsClientUtil = new WSClientUtil(new URI(URLs.WSURI + NativeUtil.GetJWT(this)), this, isLogEnable, listener);
+            wsClientUtil = new WSClientUtil(
+                    new URI(URLs.WSURI + NativeUtil.GetJWT(this) + "&game=" + GameID)
+                    , this, isLogEnable, listener);
             wsClientUtil.connect();
         } catch (URISyntaxException e) {
             if (isLogEnable)
@@ -40,7 +42,8 @@ public class GSNotificationService extends Service {
     @Override
     public boolean onUnbind (Intent intent) {
         try {
-            wsClientUtil.close();
+            // wsClientUtil.close();
+            // GSNotificationID = 1000;
         } catch (Exception e) {
             if (isLogEnable)
                 Log.e(TAG, e.toString());
@@ -51,7 +54,8 @@ public class GSNotificationService extends Service {
     @Override
     public void onDestroy () {
         try {
-            wsClientUtil.close();
+            // wsClientUtil.close();
+            //  GSNotificationID = 1000;
         } catch (Exception e) {
             if (isLogEnable)
                 Log.e(TAG, e.toString());

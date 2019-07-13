@@ -17,10 +17,6 @@ public class Notification implements Serializable {
     @Expose
     private String Description;
 
-    @SerializedName ("3")
-    @Expose
-    private String Icon;
-
     @SerializedName ("4")
     @Expose
     private TapActionType TapActionType = ir.FiroozehCorp.GameService.UnityPackage.Native.Enums.TapActionType.CLOSE_NOTIFICATION;
@@ -39,10 +35,6 @@ public class Notification implements Serializable {
 
     public String getDescription () {
         return Description;
-    }
-
-    public String getIcon () {
-        return Icon;
     }
 
     public ir.FiroozehCorp.GameService.UnityPackage.Native.Enums.TapActionType getTapActionType () {
@@ -70,7 +62,6 @@ public class Notification implements Serializable {
         return "Notification{" +
                 "title='" + title + '\'' +
                 ", Description='" + Description + '\'' +
-                ", Icon='" + Icon + '\'' +
                 ", TapActionType=" + TapActionType +
                 ", TapAction=" + TapAction +
                 ", JsonData='" + JsonData + '\'' +

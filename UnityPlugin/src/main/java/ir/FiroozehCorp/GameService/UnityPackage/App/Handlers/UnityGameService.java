@@ -14,7 +14,6 @@ import ir.FiroozehCorp.GameService.IAsyncGameServiceCallback;
 import ir.FiroozehCorp.GameService.IGameServiceInterface;
 import ir.FiroozehCorp.GameService.UnityPackage.App.Interfaces.InstallDialogListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Interfaces.IGameServiceCallback;
-import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonDataListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.NotificationListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Services.GSNotificationService;
 import ir.FiroozehCorp.GameService.UnityPackage.Utils.DeviceInformationUtil;
@@ -40,6 +39,7 @@ public final class UnityGameService implements InstallDialogListener {
 
     // Notification Service
     private GSNotificationService gsNotificationService;
+    private NotificationListener notificationListener;
 
     public UnityGameService () {
         Instance = this;
@@ -62,7 +62,7 @@ public final class UnityGameService implements InstallDialogListener {
             , String clientSecret
             , boolean isLogEnable
             , IGameServiceCallback callback
-            , JsonDataListener listener) {
+            , NotificationListener listener) {
 
         if (clientId != null && clientSecret != null
                 && !clientId.isEmpty() && !clientSecret.isEmpty()) {
@@ -70,8 +70,8 @@ public final class UnityGameService implements InstallDialogListener {
             this.clientSecret = clientSecret;
             this.InitCallback = callback;
             this.isLogEnable = isLogEnable;
+            this.notificationListener = listener;
 
-            BindNotificationService(listener);
             initGameService(InitCallback);
 
         } else {
@@ -669,43 +669,16 @@ public final class UnityGameService implements InstallDialogListener {
         InitCallback.OnError("GameServiceInstallDialogDismiss");
     }
 
-    private class GameService implements ServiceConnection {
-        public void onServiceConnected (ComponentName name, IBinder boundService) {
-            gameServiceInterface = IGameServiceInterface.Stub
-                    .asInterface(boundService);
-            try {
-                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
-                    @Override
-                    public void OnCallback (String Result) {
-                        InitCallback.OnCallback("Success");
-                    }
-
-                    @Override
-                    public void OnError (String Error) {
-                        InitCallback.OnError(Error);
-                    }
-                };
-                gameServiceInterface.InitService(clientId, clientSecret, DeviceInformationUtil.GetSystemInfo(UnityActivity, false).ToJSON(), iAsyncGameServiceCallback);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void onServiceDisconnected (ComponentName name) {
-            gameServiceInterface = null;
-        }
-    }
-
-    private void BindNotificationService (final JsonDataListener listener) {
+    private void BindNotificationService (final NotificationListener listener, final String GameID) {
         ServiceConnection gsNotificationConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected (ComponentName name, IBinder service) {
                 GSNotificationService.LocalBinder binder = (GSNotificationService.LocalBinder) service;
                 gsNotificationService = binder.get();
 
-                gsNotificationService.StartWSClient(new NotificationListener() {
+                gsNotificationService.StartWSClient(GameID, new NotificationListener() {
                     @Override
-                    public void JsonData (String JsonData) {
+                    public void onData (String JsonData) {
                         if (listener != null) listener.onData(JsonData);
                         else {
                             if (isLogEnable)
@@ -726,8 +699,41 @@ public final class UnityGameService implements InstallDialogListener {
             }
         };
 
-        UnityActivity.bindService(new Intent(UnityActivity, GSNotificationService.class)
+        boolean ret = UnityActivity.bindService(new Intent(UnityActivity, GSNotificationService.class)
                 , gsNotificationConnection, Context.BIND_AUTO_CREATE);
 
+        if (!ret) {
+            if (isLogEnable)
+                Log.e(TAG, "GSNotificationServiceNotBounded");
+        }
+
+    }
+
+    private class GameService implements ServiceConnection {
+        public void onServiceConnected (ComponentName name, IBinder boundService) {
+            gameServiceInterface = IGameServiceInterface.Stub
+                    .asInterface(boundService);
+            try {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        BindNotificationService(notificationListener, Result);
+                        InitCallback.OnCallback("Success");
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        InitCallback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.InitService(clientId, clientSecret, DeviceInformationUtil.GetSystemInfo(UnityActivity, false).ToJSON(), iAsyncGameServiceCallback);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public void onServiceDisconnected (ComponentName name) {
+            gameServiceInterface = null;
+        }
     }
 }
