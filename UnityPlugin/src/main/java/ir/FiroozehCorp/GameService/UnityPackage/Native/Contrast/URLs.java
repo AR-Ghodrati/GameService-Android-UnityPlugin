@@ -2,7 +2,8 @@ package ir.FiroozehCorp.GameService.UnityPackage.Native.Contrast;
 
 public final class URLs {
 
-    public static final String BaseURL = "https://gameservice.liara.run";
+    public static final String BaseURL = "https://gamesservice.ir";
+    public static final String WSURI = "wss://gamesservice.ir?token=";
 
 
     public static final String LoginUser = BaseURL + "/Auth/app/login";

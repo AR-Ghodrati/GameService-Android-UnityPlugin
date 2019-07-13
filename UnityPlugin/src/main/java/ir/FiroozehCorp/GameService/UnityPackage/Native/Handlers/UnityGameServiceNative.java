@@ -1,6 +1,11 @@
 package ir.FiroozehCorp.GameService.UnityPackage.Native.Handlers;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.util.Log;
 
 import com.android.volley.VolleyLog;
@@ -13,11 +18,14 @@ import org.json.JSONObject;
 import ir.FiroozehCorp.GameService.UnityPackage.Interfaces.IGameServiceCallback;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Dialogs.LoginDialog;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonArrayCallbackListener;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonDataListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonObjectCallbackListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.LoginListener;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.NotificationListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Achievement;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Game;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.LeaderBoard;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Services.GSNotificationService;
 import ir.FiroozehCorp.GameService.UnityPackage.Utils.ApiRequestUtil;
 import ir.FiroozehCorp.GameService.UnityPackage.Utils.ConnectivityUtil;
 import ir.FiroozehCorp.GameService.UnityPackage.Utils.DeviceInformationUtil;
@@ -28,7 +36,7 @@ import ir.FiroozehCorp.GameService.UnityPackage.Utils.NotificationUtil;
 
 public final class UnityGameServiceNative implements LoginListener {
 
-    private static final String TAG = "UnityGameServiceNative";
+    public static final String TAG = "UnityGameServiceNative";
     private static UnityGameServiceNative Instance;
     public static boolean IsLogEnable = false;
 
@@ -36,6 +44,9 @@ public final class UnityGameServiceNative implements LoginListener {
     private String clientId, clientSecret;
     private IGameServiceCallback InitCallback;
     private Game currentGame;
+
+    // Notification Service
+    private GSNotificationService gsNotificationService;
 
     // Play Token
     public static String PT;
@@ -61,7 +72,8 @@ public final class UnityGameServiceNative implements LoginListener {
             String clientId
             , String clientSecret
             , boolean isLogEnable
-            , IGameServiceCallback callback) {
+            , IGameServiceCallback callback
+            , JsonDataListener listener) {
 
         if (clientId != null && clientSecret != null
                 && !clientId.isEmpty() && !clientSecret.isEmpty()) {
@@ -72,6 +84,8 @@ public final class UnityGameServiceNative implements LoginListener {
 
 
             Log.d(TAG, "IsLogEnable : " + isLogEnable);
+
+            BindNotificationService(listener);
 
             if (NativeUtil.IsUserLogin(UnityActivity))
                 initGameService();
@@ -524,4 +538,40 @@ public final class UnityGameServiceNative implements LoginListener {
 
         InitCallback.OnError("LoginDismissed");
     }
+
+    private void BindNotificationService (final JsonDataListener listener) {
+        ServiceConnection gsNotificationConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected (ComponentName name, IBinder service) {
+                GSNotificationService.LocalBinder binder = (GSNotificationService.LocalBinder) service;
+                gsNotificationService = binder.get();
+
+                gsNotificationService.StartWSClient(new NotificationListener() {
+                    @Override
+                    public void JsonData (String JsonData) {
+                        if (listener != null) listener.onData(JsonData);
+                        else {
+                            if (IsLogEnable)
+                                Log.e(TAG, "JsonData Listener Is Null");
+                        }
+                    }
+                });
+
+                if (IsLogEnable)
+                    Log.d(TAG, "Notification Service Connected!");
+            }
+
+            @Override
+            public void onServiceDisconnected (ComponentName name) {
+                if (IsLogEnable)
+                    Log.d(TAG, "Notification Service Disconnected!");
+
+            }
+        };
+
+        UnityActivity.bindService(new Intent(UnityActivity, GSNotificationService.class)
+                , gsNotificationConnection, Context.BIND_AUTO_CREATE);
+
+    }
 }
+

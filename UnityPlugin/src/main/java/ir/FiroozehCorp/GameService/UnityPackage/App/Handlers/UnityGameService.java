@@ -14,6 +14,9 @@ import ir.FiroozehCorp.GameService.IAsyncGameServiceCallback;
 import ir.FiroozehCorp.GameService.IGameServiceInterface;
 import ir.FiroozehCorp.GameService.UnityPackage.App.Interfaces.InstallDialogListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Interfaces.IGameServiceCallback;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonDataListener;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.NotificationListener;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Services.GSNotificationService;
 import ir.FiroozehCorp.GameService.UnityPackage.Utils.DeviceInformationUtil;
 
 /**
@@ -33,6 +36,10 @@ public final class UnityGameService implements InstallDialogListener {
 
     private String clientId, clientSecret;
     private IGameServiceCallback InitCallback;
+
+
+    // Notification Service
+    private GSNotificationService gsNotificationService;
 
     public UnityGameService () {
         Instance = this;
@@ -54,7 +61,8 @@ public final class UnityGameService implements InstallDialogListener {
             String clientId
             , String clientSecret
             , boolean isLogEnable
-            , IGameServiceCallback callback) {
+            , IGameServiceCallback callback
+            , JsonDataListener listener) {
 
         if (clientId != null && clientSecret != null
                 && !clientId.isEmpty() && !clientSecret.isEmpty()) {
@@ -63,6 +71,7 @@ public final class UnityGameService implements InstallDialogListener {
             this.InitCallback = callback;
             this.isLogEnable = isLogEnable;
 
+            BindNotificationService(listener);
             initGameService(InitCallback);
 
         } else {
@@ -685,5 +694,40 @@ public final class UnityGameService implements InstallDialogListener {
         public void onServiceDisconnected (ComponentName name) {
             gameServiceInterface = null;
         }
+    }
+
+    private void BindNotificationService (final JsonDataListener listener) {
+        ServiceConnection gsNotificationConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected (ComponentName name, IBinder service) {
+                GSNotificationService.LocalBinder binder = (GSNotificationService.LocalBinder) service;
+                gsNotificationService = binder.get();
+
+                gsNotificationService.StartWSClient(new NotificationListener() {
+                    @Override
+                    public void JsonData (String JsonData) {
+                        if (listener != null) listener.onData(JsonData);
+                        else {
+                            if (isLogEnable)
+                                Log.e(TAG, "JsonData Listener Is Null");
+                        }
+                    }
+                });
+
+                if (isLogEnable)
+                    Log.d(TAG, "Notification Service Connected!");
+            }
+
+            @Override
+            public void onServiceDisconnected (ComponentName name) {
+                if (isLogEnable)
+                    Log.d(TAG, "Notification Service Disconnected!");
+
+            }
+        };
+
+        UnityActivity.bindService(new Intent(UnityActivity, GSNotificationService.class)
+                , gsNotificationConnection, Context.BIND_AUTO_CREATE);
+
     }
 }
