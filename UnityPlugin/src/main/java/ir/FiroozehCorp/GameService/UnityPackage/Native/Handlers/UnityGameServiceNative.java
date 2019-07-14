@@ -549,7 +549,7 @@ public final class UnityGameServiceNative implements LoginListener {
                 GSNotificationService.LocalBinder binder = (GSNotificationService.LocalBinder) service;
                 gsNotificationService = binder.get();
 
-                gsNotificationService.StartWSClient(GameID, new NotificationListener() {
+                gsNotificationService.StartWSClient(GameID, NativeUtil.GetJWT(UnityActivity), new NotificationListener() {
                     @Override
                     public void onData (String JsonData) {
                         if (listener != null) listener.onData(JsonData);
@@ -572,6 +572,7 @@ public final class UnityGameServiceNative implements LoginListener {
             }
         };
 
+        UnityActivity.startService(new Intent(UnityActivity, GSNotificationService.class));
         UnityActivity.bindService(new Intent(UnityActivity, GSNotificationService.class)
                 , gsNotificationConnection, Context.BIND_AUTO_CREATE);
 

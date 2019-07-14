@@ -14,6 +14,7 @@ import java.util.Map;
 
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.NotificationListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Notification;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Services.GSNotificationService;
 
 import static ir.FiroozehCorp.GameService.UnityPackage.Native.Services.GSNotificationService.TAG;
 
@@ -69,7 +70,8 @@ public class WSClientUtil extends WebSocketClient {
 
     @Override
     public void onClose (int i, String s, boolean b) {
-
+        GSNotificationService.isWsConnected = false;
+        if (isLogEnable) Log.e(TAG, "Notification Service Closed!");
     }
 
     @Override

@@ -669,14 +669,14 @@ public final class UnityGameService implements InstallDialogListener {
         InitCallback.OnError("GameServiceInstallDialogDismiss");
     }
 
-    private void BindNotificationService (final NotificationListener listener, final String GameID) {
+    private void BindNotificationService (final NotificationListener listener, final String GameID, final String JWT) {
         ServiceConnection gsNotificationConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected (ComponentName name, IBinder service) {
                 GSNotificationService.LocalBinder binder = (GSNotificationService.LocalBinder) service;
                 gsNotificationService = binder.get();
 
-                gsNotificationService.StartWSClient(GameID, new NotificationListener() {
+                gsNotificationService.StartWSClient(GameID, JWT, new NotificationListener() {
                     @Override
                     public void onData (String JsonData) {
                         if (listener != null) listener.onData(JsonData);
@@ -717,7 +717,8 @@ public final class UnityGameService implements InstallDialogListener {
                 IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
                     @Override
                     public void OnCallback (String Result) {
-                        BindNotificationService(notificationListener, Result);
+                        String[] data = Result.split(",");
+                        BindNotificationService(notificationListener, data[1], data[0]);
                         InitCallback.OnCallback("Success");
                     }
 

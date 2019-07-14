@@ -22,6 +22,7 @@ import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Achievement;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.LeaderBoard;
 import ir.FiroozehCorp.GameService.UnityPackage.R;
 
+import static android.app.Notification.DEFAULT_VIBRATE;
 import static ir.FiroozehCorp.GameService.UnityPackage.Native.Services.GSNotificationService.GSNotificationID;
 
 public final class NotificationUtil {
@@ -140,6 +141,11 @@ public final class NotificationUtil {
             builder.setAutoCancel(true);
             builder.setOnlyAlertOnce(true);
             builder.setSmallIcon(icon);
+            builder.setWhen(System.currentTimeMillis());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                builder.setShowWhen(true);
+            }
+            builder.setDefaults(DEFAULT_VIBRATE);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                 builder.setPriority(Notification.PRIORITY_MAX);
@@ -153,6 +159,8 @@ public final class NotificationUtil {
                 NotificationChannel channel = new NotificationChannel(id, "GameServiceUnityNotification",
                         importance);
                 channel.setDescription("GameServiceUnityNotificationChannel");
+                channel.enableLights(true);
+                channel.enableVibration(true);
                 notificationManager.createNotificationChannel(channel);
                 builder.setChannelId(id);
             }
@@ -173,7 +181,14 @@ public final class NotificationUtil {
                     }
                     break;
                 case OPEN_LINK:
-                    Intent notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(notification.getTapAction().getLinkAddress()));
+
+                    String url = notification.getTapAction().getLinkAddress();
+                    if (!url.startsWith("http://") && !url.startsWith("https://"))
+                        url = "http://" + url;
+
+                    Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
+                    notificationIntent.setData(Uri.parse(url));
+
                     PendingIntent notifyPendingIntent = PendingIntent
                             .getActivity(activity, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     builder.setContentIntent(notifyPendingIntent);
@@ -187,10 +202,8 @@ public final class NotificationUtil {
                                         Uri.parse("bazaar://details?id=" + notification.getTapAction().getPackageName()));
                                 notificationIntentBAZAAR.setPackage("com.farsitel.bazaar");
                             } catch (ActivityNotFoundException e) {
-                                notificationIntentBAZAAR = new Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("https://cafebazaar.ir/app/" + notification.getTapAction().getPackageName() + "/?l=fa")
-                                );
+                                notificationIntentBAZAAR = new Intent(Intent.ACTION_VIEW);
+                                notificationIntentBAZAAR.setData(Uri.parse("https://cafebazaar.ir/app/" + notification.getTapAction().getPackageName() + "/?l=fa"));
                             }
                             PendingIntent notifyPendingIntentBazaar = PendingIntent
                                     .getActivity(activity, 0, notificationIntentBAZAAR, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -202,10 +215,8 @@ public final class NotificationUtil {
                                 notificationIntentMyket = new Intent(Intent.ACTION_VIEW,
                                         Uri.parse("myket://details?id=" + notification.getTapAction().getPackageName()));
                             } catch (ActivityNotFoundException e) {
-                                notificationIntentMyket = new Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("https://myket.ir/app/" + notification.getTapAction().getPackageName() + "/?l=fa")
-                                );
+                                notificationIntentMyket = new Intent(Intent.ACTION_VIEW);
+                                notificationIntentMyket.setData(Uri.parse("https://myket.ir/app/" + notification.getTapAction().getPackageName()));
                             }
                             PendingIntent notifyPendingIntentMyket = PendingIntent
                                     .getActivity(activity, 0, notificationIntentMyket, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -217,10 +228,8 @@ public final class NotificationUtil {
                                 notificationIntentIranApps = new Intent(Intent.ACTION_VIEW,
                                         Uri.parse("iranapps://app/" + notification.getTapAction().getPackageName()));
                             } catch (ActivityNotFoundException e) {
-                                notificationIntentIranApps = new Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse("http://iranapps.ir/app/" + notification.getTapAction().getPackageName() + "/?l=fa")
-                                );
+                                notificationIntentIranApps = new Intent(Intent.ACTION_VIEW);
+                                notificationIntentIranApps.setData(Uri.parse("https://iranapps.ir/app/" + notification.getTapAction().getPackageName()));
                             }
                             PendingIntent notifyPendingIntentIranApps = PendingIntent
                                     .getActivity(activity, 0, notificationIntentIranApps, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -281,9 +290,17 @@ public final class NotificationUtil {
             }
 
                 Notification noti = builder.getNotification();
-                notificationManager.notify("GameServiceUnity", GSNotificationID, noti);
-                GSNotificationID++;
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                noti.priority = Notification.PRIORITY_MAX;
+                noti.defaults = 0;// reset
+                noti.defaults |= Notification.DEFAULT_LIGHTS;
+                noti.defaults |= Notification.DEFAULT_SOUND;
+                noti.defaults |= DEFAULT_VIBRATE;
+            }
+            notificationManager.notify("GameServiceUnity", GSNotificationID, noti);
+            WakeLocker.acquire(activity);
+            GSNotificationID++;
         }
     }
 }
