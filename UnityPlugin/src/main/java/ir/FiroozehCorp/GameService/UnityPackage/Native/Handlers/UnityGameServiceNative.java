@@ -22,6 +22,7 @@ import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.JsonObjectCall
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.LoginListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.NotificationListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Achievement;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Bucket;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Game;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.LeaderBoard;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Services.GSNotificationService;
@@ -517,6 +518,223 @@ public final class UnityGameServiceNative implements LoginListener {
                 Log.e(TAG, "NetworkUnreachable");
 
             callback.OnError("NetworkUnreachable");
+        }
+    }
+
+    public void GetAllBucketData (final String BucketID, final IGameServiceCallback callback) {
+        if (BucketID != null && !BucketID.isEmpty()) {
+            if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+
+                ApiRequestUtil.GetAllBucketDataByID(UnityActivity, BucketID,
+                        new JsonArrayCallbackListener() {
+                            @Override
+                            public void onResponse (JSONArray array) {
+                                callback.OnCallback(array.toString());
+                            }
+
+                            @Override
+                            public void onError (String error) {
+
+                                if (IsLogEnable)
+                                    Log.e(TAG, "GetAllBucketData : " + error);
+
+                                callback.OnError(error);
+                            }
+                        });
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "NetworkUnreachable");
+
+                callback.OnError("NetworkUnreachable");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "InvalidInputs");
+
+            callback.OnError("InvalidInputs");
+        }
+    }
+
+    public void GetOneBucketData (final String BucketID, final String ID, final IGameServiceCallback callback) {
+        if (BucketID != null && !BucketID.isEmpty() && ID != null && !ID.isEmpty()) {
+
+            if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+                ApiRequestUtil.GetOneBucketDataByID(UnityActivity, BucketID, ID,
+                        new JsonObjectCallbackListener() {
+                            @Override
+                            public void onResponse (JSONObject object) {
+                                Gson gson = new Gson();
+                                Bucket bucket = gson.fromJson(object.toString(), Bucket.class);
+                                callback.OnCallback(gson.toJson(bucket));
+                            }
+
+                            @Override
+                            public void onError (String error) {
+
+                                if (IsLogEnable)
+                                    Log.e(TAG, "GetOneBucketData : " + error);
+
+                                callback.OnError(error);
+                            }
+                        });
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "NetworkUnreachable");
+
+                callback.OnError("NetworkUnreachable");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "InvalidInputs");
+
+            callback.OnError("InvalidInputs");
+        }
+    }
+
+    public void UpdateOneBucketData (final String BucketID, final String ID, final String BucketJSON, final IGameServiceCallback callback) {
+        if (BucketID != null && !BucketID.isEmpty() && ID != null && !ID.isEmpty() && BucketJSON != null && !BucketJSON.isEmpty()) {
+
+            if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+                ApiRequestUtil.UpdateOneBucketDataByID(UnityActivity, BucketID, ID, BucketJSON,
+                        new JsonObjectCallbackListener() {
+                            @Override
+                            public void onResponse (JSONObject object) {
+                                Gson gson = new Gson();
+                                Bucket bucket = gson.fromJson(object.toString(), Bucket.class);
+                                callback.OnCallback(gson.toJson(bucket));
+                            }
+
+                            @Override
+                            public void onError (String error) {
+
+                                if (IsLogEnable)
+                                    Log.e(TAG, "UpdateOneBucketData : " + error);
+
+                                callback.OnError(error);
+                            }
+                        });
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "NetworkUnreachable");
+
+                callback.OnError("NetworkUnreachable");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "InvalidInputs");
+
+            callback.OnError("InvalidInputs");
+        }
+    }
+
+    public void AddNewBucketData (final String BucketID, final String BucketJSON, final IGameServiceCallback callback) {
+        if (BucketID != null && !BucketID.isEmpty() && BucketJSON != null && !BucketJSON.isEmpty()) {
+            if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+                ApiRequestUtil.AddOneBucketByID(UnityActivity, BucketID, BucketJSON,
+                        new JsonObjectCallbackListener() {
+                            @Override
+                            public void onResponse (JSONObject object) {
+                                Gson gson = new Gson();
+                                Bucket bucket = gson.fromJson(object.toString(), Bucket.class);
+                                callback.OnCallback(gson.toJson(bucket));
+                            }
+
+                            @Override
+                            public void onError (String error) {
+
+                                if (IsLogEnable)
+                                    Log.e(TAG, "AddNewBucketData : " + error);
+
+                                callback.OnError(error);
+                            }
+                        });
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "NetworkUnreachable");
+
+                callback.OnError("NetworkUnreachable");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "InvalidInputs");
+
+            callback.OnError("InvalidInputs");
+        }
+    }
+
+    public void DeleteOneBucket (final String BucketID, final String ID, final IGameServiceCallback callback) {
+        if (BucketID != null && !BucketID.isEmpty() && ID != null && !ID.isEmpty()) {
+            if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+                ApiRequestUtil.DeleteOneBucketByID(UnityActivity, BucketID, ID,
+                        new JsonObjectCallbackListener() {
+                            @Override
+                            public void onResponse (JSONObject object) {
+                                try {
+                                    callback.OnCallback(String.valueOf(object.getBoolean("status")));
+                                } catch (JSONException e) {
+                                    callback.OnCallback("false");
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onError (String error) {
+
+                                if (IsLogEnable)
+                                    Log.e(TAG, "DeleteOneBucket : " + error);
+
+                                callback.OnError(error);
+                            }
+                        });
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "NetworkUnreachable");
+
+                callback.OnError("NetworkUnreachable");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "InvalidInputs");
+
+            callback.OnError("InvalidInputs");
+        }
+    }
+
+    public void DeleteAllBucketData (final String BucketID, final IGameServiceCallback callback) {
+        if (BucketID != null && !BucketID.isEmpty()) {
+            if (ConnectivityUtil.isNetworkConnected(UnityActivity)) {
+                ApiRequestUtil.DeleteAllBucketByID(UnityActivity, BucketID,
+                        new JsonObjectCallbackListener() {
+                            @Override
+                            public void onResponse (JSONObject object) {
+                                try {
+                                    callback.OnCallback(String.valueOf(object.getBoolean("status")));
+                                } catch (JSONException e) {
+                                    callback.OnCallback("false");
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onError (String error) {
+
+                                if (IsLogEnable)
+                                    Log.e(TAG, "DeleteAllBucketData : " + error);
+
+                                callback.OnError(error);
+                            }
+                        });
+            } else {
+                if (IsLogEnable)
+                    Log.e(TAG, "NetworkUnreachable");
+
+                callback.OnError("NetworkUnreachable");
+            }
+        } else {
+            if (IsLogEnable)
+                Log.e(TAG, "InvalidInputs");
+
+            callback.OnError("InvalidInputs");
         }
     }
 

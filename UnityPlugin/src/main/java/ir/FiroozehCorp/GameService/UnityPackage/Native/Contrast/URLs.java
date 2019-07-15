@@ -24,5 +24,8 @@ public final class URLs {
     public static final String GetLeaderboard = BaseURL + "/Api/v1/Leaderboard/";
 
 
+    public static final String Bucket = BaseURL + "/Api/v1/bucket/";
+
+
 
 }

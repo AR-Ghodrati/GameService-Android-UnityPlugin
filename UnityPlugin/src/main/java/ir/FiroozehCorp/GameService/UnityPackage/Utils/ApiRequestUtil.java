@@ -8,12 +8,15 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -563,6 +566,284 @@ public final class ApiRequestUtil {
 
         Volley.newRequestQueue(activity).add(request);
     }
+
+
+    public static void GetAllBucketDataByID (
+            final Activity activity
+            , final String BucketID
+            , final JsonArrayCallbackListener listener) {
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET
+                , URLs.Bucket + BucketID, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse (JSONArray array) {
+                listener.onResponse(array);
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse (VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    try {
+                        JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
+                        listener.onError(object.getString("msg"));
+                    } catch (Exception ignored) {
+                    }
+                } else listener.onError("ServerError");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders () {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", PT);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(0
+                , DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setShouldCache(false);
+
+        Volley.newRequestQueue(activity).add(request);
+    }
+
+
+    public static void GetOneBucketDataByID (
+            final Activity activity
+            , final String BucketID
+            , final String DataID
+            , final JsonObjectCallbackListener listener) {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET
+                , URLs.Bucket + BucketID + '/' + DataID, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse (JSONObject object) {
+                listener.onResponse(object);
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse (VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    try {
+                        JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
+                        listener.onError(object.getString("msg"));
+                    } catch (Exception ignored) {
+                    }
+                } else listener.onError("ServerError");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders () {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", PT);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(0
+                , DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setShouldCache(false);
+
+        Volley.newRequestQueue(activity).add(request);
+    }
+
+
+    public static void UpdateOneBucketDataByID (
+            final Activity activity
+            , final String BucketID
+            , final String DataID
+            , final String BucketJSON
+            , final JsonObjectCallbackListener listener) {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT
+                , URLs.Bucket + BucketID + '/' + DataID, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse (JSONObject object) {
+                listener.onResponse(object);
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse (VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    try {
+                        JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
+                        listener.onError(object.getString("msg"));
+                    } catch (Exception ignored) {
+                    }
+                } else listener.onError("ServerError");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders () {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", PT);
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody () {
+                try {
+                    return BucketJSON.getBytes("utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    return null;
+                }
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(0
+                , DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setShouldCache(false);
+
+        Volley.newRequestQueue(activity).add(request);
+    }
+
+
+    public static void AddOneBucketByID (
+            final Activity activity
+            , final String BucketID
+            , final String BucketJSON
+            , final JsonObjectCallbackListener listener) {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST
+                , URLs.Bucket + BucketID, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse (JSONObject object) {
+                listener.onResponse(object);
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse (VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    try {
+                        JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
+                        listener.onError(object.getString("msg"));
+                    } catch (Exception ignored) {
+                    }
+                } else listener.onError("ServerError");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders () {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", PT);
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody () {
+                try {
+                    return BucketJSON.getBytes("utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    return null;
+                }
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(0
+                , DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setShouldCache(false);
+
+        Volley.newRequestQueue(activity).add(request);
+    }
+
+
+    public static void DeleteOneBucketByID (
+            final Activity activity
+            , final String BucketID
+            , final String ID
+            , final JsonObjectCallbackListener listener) {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE
+                , URLs.Bucket + BucketID + '/' + ID, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse (JSONObject object) {
+                listener.onResponse(object);
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse (VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    try {
+                        JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
+                        listener.onError(object.getString("msg"));
+                    } catch (Exception ignored) {
+                    }
+                } else listener.onError("ServerError");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders () {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", PT);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(0
+                , DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setShouldCache(false);
+
+        Volley.newRequestQueue(activity).add(request);
+    }
+
+
+    public static void DeleteAllBucketByID (
+            final Activity activity
+            , final String BucketID
+            , final JsonObjectCallbackListener listener) {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE
+                , URLs.Bucket + BucketID, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse (JSONObject object) {
+                listener.onResponse(object);
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse (VolleyError volleyError) {
+                if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+                    try {
+                        JSONObject object = new JSONObject(new String(volleyError.networkResponse.data));
+                        listener.onError(object.getString("msg"));
+                    } catch (Exception ignored) {
+                    }
+                } else listener.onError("ServerError");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders () {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("x-access-token", PT);
+                return headers;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(0
+                , DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setShouldCache(false);
+
+        Volley.newRequestQueue(activity).add(request);
+    }
+
+
+
+
+
+
+
+
+
 
 
 
