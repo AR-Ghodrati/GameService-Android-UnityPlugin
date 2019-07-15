@@ -26,7 +26,13 @@ interface IGameServiceInterface {
 
 
     void RequestDownloadObbDataFile(String ObbDataTAG,IAsyncGameServiceCallback callback);
+   //void RequestDownloadBundleDataFile(String BundleDataTAG,IAsyncGameServiceCallback callback);
 
-
+   void GetAllBucketData(String BucketID, IAsyncGameServiceCallback callback);
+   void GetOneBucketData(String BucketID, String ID, IAsyncGameServiceCallback callback);
+   void UpdateOneBucketData(String BucketID, String ID,  String BucketJSON, IAsyncGameServiceCallback callback);
+   void AddNewBucketData (String BucketID, String BucketJSON, IAsyncGameServiceCallback callback);
+   void DeleteOneBucket (String BucketID, String ID, IAsyncGameServiceCallback callback);
+   void DeleteAllBucketData(String BucketID, IAsyncGameServiceCallback callback);
 
 }

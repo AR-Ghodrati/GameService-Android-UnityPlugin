@@ -836,16 +836,4 @@ public final class ApiRequestUtil {
         Volley.newRequestQueue(activity).add(request);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

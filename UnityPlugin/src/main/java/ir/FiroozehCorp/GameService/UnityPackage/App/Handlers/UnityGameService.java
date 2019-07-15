@@ -644,6 +644,200 @@ public final class UnityGameService implements InstallDialogListener {
     */
 
 
+    public void GetAllBucketData (final String BucketID, final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "GetAllBucketData: " + Error);
+
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.GetAllBucketData(BucketID, iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+            callback.OnError("GameServiceFatalException");
+        }
+    }
+
+    public void GetOneBucketData (final String BucketID, final String ID, final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "GetOneBucketData: " + Error);
+
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.GetOneBucketData(BucketID, ID, iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+            callback.OnError("GameServiceFatalException");
+        }
+    }
+
+    public void UpdateOneBucketData (final String BucketID, final String ID, final String BucketJSON, final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "UpdateOneBucketData: " + Error);
+
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.UpdateOneBucketData(BucketID, ID, BucketJSON, iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+            callback.OnError("GameServiceFatalException");
+        }
+    }
+
+    public void AddNewBucketData (final String BucketID, final String BucketJSON, final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "AddNewBucketData: " + Error);
+
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.AddNewBucketData(BucketID, BucketJSON, iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+            callback.OnError("GameServiceFatalException");
+        }
+    }
+
+    public void DeleteOneBucket (final String BucketID, final String ID, final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "DeleteOneBucket: " + Error);
+
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.DeleteOneBucket(BucketID, ID, iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+            callback.OnError("GameServiceFatalException");
+        }
+    }
+
+    public void DeleteAllBucketData (final String BucketID, final IGameServiceCallback callback) {
+        try {
+            if (gameServiceInterface == null) {
+                if (isLogEnable)
+                    Log.e(TAG, "UnreachableService");
+
+                callback.OnError("UnreachableService");
+            } else {
+                IAsyncGameServiceCallback.Stub iAsyncGameServiceCallback = new IAsyncGameServiceCallback.Stub() {
+                    @Override
+                    public void OnCallback (String Result) {
+                        callback.OnCallback(Result);
+                    }
+
+                    @Override
+                    public void OnError (String Error) {
+                        if (isLogEnable)
+                            Log.e(TAG, "DeleteAllBucketData: " + Error);
+
+                        callback.OnError(Error);
+                    }
+                };
+                gameServiceInterface.DeleteAllBucketData(BucketID, iAsyncGameServiceCallback);
+            }
+        } catch (Exception e) {
+            if (isLogEnable)
+                Log.e(TAG, "GameServiceFatalException,e : " + e.toString());
+
+            callback.OnError("GameServiceFatalException");
+        }
+    }
+
+
+
     private boolean isPackageInstalled (PackageManager packageManager) {
         try {
             packageManager.getPackageInfo("ir.FiroozehCorp.GameService", 0);
