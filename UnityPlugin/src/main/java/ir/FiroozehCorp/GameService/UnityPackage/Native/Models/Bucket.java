@@ -31,6 +31,17 @@ public class Bucket implements Serializable {
         return Data;
     }
 
+    public void setBucketID (String bucketID) {
+        BucketID = bucketID;
+    }
+
+    public void setID (String ID) {
+        this.ID = ID;
+    }
+
+    public void setData (String data) {
+        Data = data;
+    }
 
     @Override
     public String toString () {

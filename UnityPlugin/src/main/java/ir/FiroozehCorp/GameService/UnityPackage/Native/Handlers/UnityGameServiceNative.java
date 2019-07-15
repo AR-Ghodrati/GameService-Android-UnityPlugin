@@ -565,7 +565,15 @@ public final class UnityGameServiceNative implements LoginListener {
                             @Override
                             public void onResponse (JSONObject object) {
                                 Gson gson = new Gson();
-                                Bucket bucket = gson.fromJson(object.toString(), Bucket.class);
+                                Bucket bucket = new Bucket();
+
+                                try {
+                                    bucket.setBucketID(object.getString("bucket"));
+                                    bucket.setID(object.getString("_id"));
+                                    bucket.setData(object.getJSONObject("data").toString());
+                                } catch (Exception ignored) {
+                                }
+
                                 callback.OnCallback(gson.toJson(bucket));
                             }
 
@@ -601,7 +609,15 @@ public final class UnityGameServiceNative implements LoginListener {
                             @Override
                             public void onResponse (JSONObject object) {
                                 Gson gson = new Gson();
-                                Bucket bucket = gson.fromJson(object.toString(), Bucket.class);
+                                Bucket bucket = new Bucket();
+
+                                try {
+                                    bucket.setBucketID(object.getString("bucket"));
+                                    bucket.setID(object.getString("_id"));
+                                    bucket.setData(object.getJSONObject("data").toString());
+                                } catch (Exception ignored) {
+                                }
+
                                 callback.OnCallback(gson.toJson(bucket));
                             }
 
@@ -636,7 +652,15 @@ public final class UnityGameServiceNative implements LoginListener {
                             @Override
                             public void onResponse (JSONObject object) {
                                 Gson gson = new Gson();
-                                Bucket bucket = gson.fromJson(object.toString(), Bucket.class);
+                                Bucket bucket = new Bucket();
+
+                                try {
+                                    bucket.setBucketID(object.getString("bucket"));
+                                    bucket.setID(object.getString("_id"));
+                                    bucket.setData(object.getJSONObject("data").toString());
+                                } catch (Exception ignored) {
+                                }
+
                                 callback.OnCallback(gson.toJson(bucket));
                             }
 
