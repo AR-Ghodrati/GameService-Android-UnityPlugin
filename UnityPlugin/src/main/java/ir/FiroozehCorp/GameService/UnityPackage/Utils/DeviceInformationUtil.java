@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.Display;
 
@@ -43,6 +44,23 @@ public final class DeviceInformationUtil {
 
         } catch (PackageManager.NameNotFoundException e) {
         }
+
+        try {
+            TelephonyManager manager = (TelephonyManager) a.getSystemService(Context.TELEPHONY_SERVICE);
+            sysInfo.setCarrierName(manager.getNetworkOperatorName());
+
+            if (NetworkUtil.isConnectedWifi(a))
+                sysInfo.setNetworkType("Wifi");
+            else if (NetworkUtil.isConnectedMobile(a))
+                sysInfo.setNetworkType("Mobile");
+
+            sysInfo.setMACAddress(NetworkUtil.getMACAddress("wlan0"));
+            sysInfo.setIPAddress(NetworkUtil.getIPAddress(true));
+        } catch (Exception e) {
+        }
+
+
+
         sysInfo.setOSAPILevel(Build.VERSION.SDK);
         sysInfo.setDevice(Build.DEVICE);
         sysInfo.setModel(Build.MODEL);

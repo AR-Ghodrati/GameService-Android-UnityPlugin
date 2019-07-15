@@ -29,12 +29,50 @@ public class SysInfo implements Serializable {
     private int GameOrientation = Configuration.ORIENTATION_LANDSCAPE;
     private String From;
 
+    private String CarrierName;
+    private String NetworkType;
+    private String MACAddress;
+    private String IPAddress;
+
+
     public int getGameOrientation () {
         return GameOrientation;
     }
 
     public String getFrom () {
         return From;
+    }
+
+    public String getCarrierName () {
+        return CarrierName;
+    }
+
+    public void setCarrierName (String carrierName) {
+        CarrierName = carrierName;
+    }
+
+    public String getNetworkType () {
+        return NetworkType;
+    }
+
+    public void setNetworkType (String networkType) {
+        NetworkType = networkType;
+    }
+
+    public String getMACAddress () {
+        return MACAddress;
+    }
+
+    public void setMACAddress (String MACAddress) {
+        this.MACAddress = MACAddress;
+    }
+
+    public String getIPAddress () {
+        return IPAddress;
+    }
+
+    public void setIPAddress (String IPAddress) {
+        this.IPAddress = IPAddress;
     }
 
     public void setFrom (String From) {
@@ -97,6 +135,7 @@ public class SysInfo implements Serializable {
         this.SDCardState = SDCardState;
     }
 
+
     @Override
     public String toString () {
         return "SysInfo{" +
@@ -114,6 +153,11 @@ public class SysInfo implements Serializable {
                 ", ScreenHeight=" + ScreenHeight +
                 ", SDCardState='" + SDCardState + '\'' +
                 ", GameOrientation=" + GameOrientation +
+                ", From='" + From + '\'' +
+                ", CarrierName='" + CarrierName + '\'' +
+                ", NetworkType='" + NetworkType + '\'' +
+                ", MACAddress='" + MACAddress + '\'' +
+                ", IPAddress='" + IPAddress + '\'' +
                 '}';
     }
 
