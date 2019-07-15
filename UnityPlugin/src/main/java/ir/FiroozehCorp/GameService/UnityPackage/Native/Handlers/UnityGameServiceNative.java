@@ -569,7 +569,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
                                 try {
                                     bucket.setBucketID(object.getString("bucket"));
-                                    bucket.setID(object.getString("_id"));
+                                    bucket.setId(object.getString("_id"));
                                     bucket.setData(object.getJSONObject("data").toString());
                                 } catch (Exception ignored) {
                                 }
@@ -613,7 +613,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
                                 try {
                                     bucket.setBucketID(object.getString("bucket"));
-                                    bucket.setID(object.getString("_id"));
+                                    bucket.setId(object.getString("_id"));
                                     bucket.setData(object.getJSONObject("data").toString());
                                 } catch (Exception ignored) {
                                 }
@@ -656,7 +656,7 @@ public final class UnityGameServiceNative implements LoginListener {
 
                                 try {
                                     bucket.setBucketID(object.getString("bucket"));
-                                    bucket.setID(object.getString("_id"));
+                                    bucket.setId(object.getString("_id"));
                                     bucket.setData(object.getJSONObject("data").toString());
                                 } catch (Exception ignored) {
                                 }

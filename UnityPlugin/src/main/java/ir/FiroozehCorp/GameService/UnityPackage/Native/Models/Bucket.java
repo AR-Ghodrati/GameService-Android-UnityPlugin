@@ -13,42 +13,42 @@ public class Bucket implements Serializable {
 
     @SerializedName ("_id")
     @Expose
-    private String ID;
+    private String id;
 
     @SerializedName ("data")
     @Expose
-    private String Data;
+    private String data;
 
     public String getBucketID () {
         return BucketID;
-    }
-
-    public String getID () {
-        return ID;
-    }
-
-    public String getData () {
-        return Data;
     }
 
     public void setBucketID (String bucketID) {
         BucketID = bucketID;
     }
 
-    public void setID (String ID) {
-        this.ID = ID;
+    public String getId () {
+        return id;
+    }
+
+    public void setId (String id) {
+        this.id = id;
+    }
+
+    public String getData () {
+        return data;
     }
 
     public void setData (String data) {
-        Data = data;
+        this.data = data;
     }
 
     @Override
     public String toString () {
         return "Bucket{" +
                 "BucketID='" + BucketID + '\'' +
-                ", ID='" + ID + '\'' +
-                ", Data='" + Data + '\'' +
+                ", id='" + id + '\'' +
+                ", data='" + data + '\'' +
                 '}';
     }
 }
