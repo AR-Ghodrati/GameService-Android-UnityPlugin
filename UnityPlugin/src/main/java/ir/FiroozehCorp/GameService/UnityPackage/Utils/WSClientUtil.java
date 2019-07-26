@@ -12,6 +12,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.util.Map;
 
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.CloseListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.NotificationListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Models.Notification;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Services.GSNotificationService;
@@ -25,13 +26,15 @@ public class WSClientUtil extends WebSocketClient {
     private Context UnityActivity;
     private Gson gson;
     private NotificationListener listener;
+    private CloseListener closeListener;
 
 
-    public WSClientUtil (URI serverUri, Context unityActivity, boolean isLogEnable, NotificationListener listener) {
+    public WSClientUtil (URI serverUri, Context unityActivity, boolean isLogEnable, NotificationListener listener, CloseListener closeListener) {
         super(serverUri);
         this.isLogEnable = isLogEnable;
         this.UnityActivity = unityActivity;
         this.listener = listener;
+        this.closeListener = closeListener;
         this.gson = new Gson();
     }
 
@@ -72,6 +75,7 @@ public class WSClientUtil extends WebSocketClient {
     public void onClose (int i, String s, boolean b) {
         GSNotificationService.isWsConnected = false;
         if (isLogEnable) Log.e(TAG, "Notification Service Closed!");
+        closeListener.onClose();
     }
 
     @Override

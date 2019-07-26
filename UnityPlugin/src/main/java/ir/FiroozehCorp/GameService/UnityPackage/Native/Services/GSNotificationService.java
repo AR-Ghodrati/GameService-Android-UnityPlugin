@@ -9,10 +9,11 @@ import android.util.Log;
 import java.net.URI;
 
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Contrast.URLs;
+import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.CloseListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Native.Interfaces.NotificationListener;
 import ir.FiroozehCorp.GameService.UnityPackage.Utils.WSClientUtil;
 
-public class GSNotificationService extends IntentService {
+public class GSNotificationService extends IntentService implements CloseListener {
 
     public static final String TAG = "GSNotificationService";
     public static boolean isLogEnable;
@@ -29,13 +30,13 @@ public class GSNotificationService extends IntentService {
         super(GSNotificationService.TAG);
     }
 
-    private void ConnectWS () {
+    public void ConnectWS () {
         if (!isWsConnected && GameID != null) {
             try {
                 isWsConnected = true;
                 wsClientUtil = new WSClientUtil(
                         new URI(URLs.WSURI + "?token=" + JWT + "&game=" + GameID)
-                        , this, isLogEnable, listener);
+                        , this, isLogEnable, listener, this);
                 wsClientUtil.connect();
             } catch (Exception e) {
                 isWsConnected = false;
@@ -69,7 +70,7 @@ public class GSNotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent (Intent intent) {
-
+        Log.e(TAG, "onHandleIntent");
     }
 
     @Override
@@ -98,6 +99,13 @@ public class GSNotificationService extends IntentService {
                 Log.e(TAG, e.toString());
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onClose () {
+        if (isLogEnable)
+            Log.e(TAG, "Open Again...");
+        ConnectWS();
     }
 
     public class LocalBinder extends Binder {
